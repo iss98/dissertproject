@@ -481,3 +481,26 @@ body {
   cursor: not-allowed;
   transform: none;
 }
+
+.ask-row {
+  margin-top: 12px;
+}
+
+.ask-btn {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 16px 20px;
+  font-size: 1.05rem;
+  font-weight: 900;
+  cursor: pointer;
+  background: #eef5ff;
+  color: #1f6feb;
+  border: 1px solid #d5e5ff;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.ask-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(31, 111, 235, 0.12);
+}

@@ -2,6 +2,8 @@ import {
   addDoc,
   collection,
   getDocs,
+  getDoc,
+  doc,
   query,
   serverTimestamp,
   where,
@@ -20,10 +22,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const questionStem = document.getElementById("questionStem");
   const solutionInput = document.getElementById("solutionInput");
   const answerInput = document.getElementById("answerInput");
-  const navButtonRow = document.getElementById("navButtonRow");
   const examDescription = document.getElementById("examDescription");
   const messageBox = document.getElementById("messageBox");
   const backBtn = document.getElementById("backBtn");
+  const askBtn = document.getElementById("askBtn");
 
   if (!studentId) {
     window.location.href = "/index.html";
@@ -34,8 +36,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let items = [];
   let currentIndex = 0;
+  let experimentValue = "";
 
-  // itemId별 최신 제출 기록
   const latestLogsByItemId = {};
 
   function showMessage(text, type = "info") {
@@ -156,19 +158,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     let html = "";
 
     if (!isFirst) {
-        html += `
+      html += `
         <button type="button" class="nav-btn secondary-btn" id="prevBtn">
-            ← 이전
+          ← 이전
         </button>
-        `;
+      `;
     }
 
     if (!isLast) {
-        html += `
+      html += `
         <button type="button" class="nav-btn primary-btn" id="nextBtn">
-            다음 →
+          다음 →
         </button>
-        `;
+      `;
     }
 
     arrowRow.innerHTML = html;
@@ -178,21 +180,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     const submitBtn = document.getElementById("submitBtn");
 
     if (prevBtn) {
-        prevBtn.addEventListener("click", () => {
-        currentIndex--;
+      prevBtn.addEventListener("click", () => {
+        currentIndex -= 1;
         renderQuestion();
-        });
+      });
     }
 
     if (nextBtn) {
-        nextBtn.addEventListener("click", () => {
-        currentIndex++;
+      nextBtn.addEventListener("click", () => {
+        currentIndex += 1;
         renderQuestion();
-        });
+      });
     }
 
     if (submitBtn) {
-        submitBtn.onclick = submitCurrentQuestion;
+      submitBtn.onclick = submitCurrentQuestion;
     }
   }
 
@@ -241,7 +243,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         correct,
       });
 
-      // 최신 입력 상태를 로컬에도 반영
       latestLogsByItemId[item.id] = {
         answer,
         solution,
@@ -268,11 +269,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  async function goToQuestionPage() {
+    const item = getCurrentItem();
+    if (!item) return;
+
+    try {
+      if (!experimentValue) {
+        const studentRef = doc(db, "students", studentId);
+        const studentSnap = await getDoc(studentRef);
+
+        if (!studentSnap.exists()) {
+          showMessage("학생 정보를 찾을 수 없습니다.", "error");
+          return;
+        }
+
+        experimentValue = studentSnap.data().experiment || "";
+      }
+
+      const returnTo = encodeURIComponent("/plusitem.html");
+      const itemId = encodeURIComponent(item.id);
+
+      if (experimentValue === "help") {
+        window.location.href = `/help.html?itemId=${itemId}&returnTo=${returnTo}`;
+      } else if (experimentValue === "nohelp") {
+        window.location.href = `/nhelp.html?itemId=${itemId}&returnTo=${returnTo}`;
+      } else {
+        showMessage("실험 그룹 정보가 올바르지 않습니다.", "error");
+      }
+    } catch (error) {
+      console.error(error);
+      showMessage("질문 페이지로 이동하는 중 오류가 발생했습니다.", "error");
+    }
+  }
+
   backBtn?.addEventListener("click", () => {
     window.location.href = "/plus.html";
   });
 
+  askBtn?.addEventListener("click", goToQuestionPage);
+
   try {
+    const studentRef = doc(db, "students", studentId);
+    const studentSnap = await getDoc(studentRef);
+    if (studentSnap.exists()) {
+      experimentValue = studentSnap.data().experiment || "";
+    }
+
     const itemsRef = collection(db, "items");
     const itemsQuery = query(
       itemsRef,
