@@ -160,6 +160,9 @@ loginForm.addEventListener("submit", async (e) => {
       window.location.href = "/stageFour.html";
     } else if (stage === 5) {
       window.location.href = "/stageFive.html";
+    }  else if (stage === 6) {
+      alert("이미 완료된 계정입니다.");
+      return;
     } else {
       showMessage("유효하지 않은 stage 값입니다.", "error");
     }
