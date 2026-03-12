@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stage 3 - 학습 선택</title>
+    <link rel="stylesheet" href="/stageThreeStyles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="page-shell">
+        <div class="left-panel">
+          <div class="brand-card">
+            <div class="brand-badge">S3</div>
+            <h1>Stage 3. 학습 선택</h1>
+            <p>
+              학습 목표를 세우고, 음수의 사칙연산 내용을 단계적으로 학습해 보세요.
+              원하는 학습 메뉴를 선택하면 해당 페이지로 이동합니다.
+            </p>
+
+            <div class="student-info-card">
+              <div class="info-row">
+                <span class="info-label">학생 아이디</span>
+                <span id="studentIdText" class="info-value">불러오는 중...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">진행 단계</span>
+                <span class="info-value">Stage 3</span>
+              </div>
+            </div>
+
+            <div id="goalDisplayCard" class="goal-display-card hidden">
+              <div class="goal-display-title">내가 오늘 설정한 목표 :</div>
+              <div id="goalDisplayText" class="goal-display-text"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="menu-card">
+            <div class="menu-header">
+              <h2>학습 메뉴</h2>
+              <p class="section-desc">
+                아래 버튼 중 원하는 학습 단계로 이동하세요.
+              </p>
+            </div>
+
+            <div class="menu-button-list">
+              <button id="goalSettingBtn" class="menu-btn" data-target="/goalsetting.html">
+                목표 세우기
+              </button>
+
+              <button class="menu-btn" data-target="/plus.html">
+                음수의 덧셈
+              </button>
+
+              <button class="menu-btn" data-target="/negativeSubtraction.html">
+                음수의 뺄셈
+              </button>
+
+              <button class="menu-btn" data-target="/negativeMultiplication.html">
+                음수의 곱셈
+              </button>
+
+              <button class="menu-btn" data-target="/negativeDivision.html">
+                음수의 나눗셈
+              </button>
+
+              <button class="menu-btn final-btn" data-target="/finalExam.html">
+                최종 시험 보러가기
+              </button>
+            </div>
+
+            <div id="messageBox" class="message-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/stageThreemain.js"></script>
+  </body>
+</html>

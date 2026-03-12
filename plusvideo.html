@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>음수의 덧셈 - 동영상 강의</title>
+    <link rel="stylesheet" href="/plusvideoStyles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="page-shell">
+        <div class="left-panel">
+          <div class="brand-card">
+            <div class="brand-badge">VID</div>
+            <h1>동영상 강의 듣기</h1>
+            <p>
+              동영상을 시청한 뒤, 학습한 내용을 자신의 말로 요약해 보세요.
+              요약한 내용은 저장되며, 다시 들어오면 가장 최근에 작성한 요약이 표시됩니다.
+            </p>
+
+            <div class="student-info-card">
+              <div class="info-row">
+                <span class="info-label">학생 아이디</span>
+                <span id="studentIdText" class="info-value">불러오는 중...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">강의 번호</span>
+                <span class="info-value">Lecture 1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="lecture-card">
+            <div class="lecture-header">
+              <h2>음수의 덧셈 동영상 강의</h2>
+              <p class="section-desc">
+                영상을 시청하고 핵심 내용을 정리해 보세요.
+              </p>
+            </div>
+
+            <div class="video-wrap">
+              <video id="lectureVideo" class="lecture-video" controls preload="metadata">
+                <source
+                  src="https://myaimedbucket.s3.ap-northeast-2.amazonaws.com/%EC%9D%B4%EC%B0%A8%EB%B6%80%EB%93%B1%EC%8B%9D.mp4"
+                  type="video/mp4"
+                />
+                브라우저가 video 태그를 지원하지 않습니다.
+              </video>
+            </div>
+
+            <form id="summaryForm" class="summary-form">
+              <label for="summaryInput" class="input-label">강의 요약</label>
+              <textarea
+                id="summaryInput"
+                class="summary-input"
+                rows="10"
+                placeholder="동영상에서 배운 핵심 내용을 정리해 보세요."
+                required
+              ></textarea>
+
+              <div class="button-row">
+                <button type="button" id="backBtn" class="secondary-btn">돌아가기</button>
+                <button type="submit" class="primary-btn">제출</button>
+              </div>
+            </form>
+
+            <div id="messageBox" class="message-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/plusvideomain.js"></script>
+  </body>
+</html>

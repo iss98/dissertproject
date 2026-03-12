@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>목표 세우기</title>
+    <link rel="stylesheet" href="/goalsettingStyles.css" />
+
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)'], ['$', '$']],
+          displayMath: [['\\[', '\\]'], ['$$', '$$']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="page-shell">
+        <div class="left-panel">
+          <div class="brand-card">
+            <div class="brand-badge">GOAL</div>
+            <h1>목표 세우기</h1>
+            <p>
+              사전검사 결과를 보고 오늘 어떻게 수학을 공부하면 좋을지 계획을 세우고
+              오늘의 최종 목표를 작성해봅시다.
+            </p>
+
+            <div class="student-info-card">
+              <div class="info-row">
+                <span class="info-label">학생 아이디</span>
+                <span id="studentIdText" class="info-value">불러오는 중...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">진행 단계</span>
+                <span class="info-value">Stage 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="goal-card">
+            <div class="goal-header">
+              <h2>사전검사 결과 확인</h2>
+              <p class="section-desc">
+                자신의 사전검사 결과를 확인하고 오늘의 학습 목표를 작성해 주세요.
+              </p>
+            </div>
+
+            <div id="loadingBox" class="loading-box">기록을 불러오는 중...</div>
+
+            <div id="contentArea" class="hidden">
+              <div class="summary-card">
+                <div class="summary-title">사전검사 요약</div>
+                <div id="scoreSummary" class="summary-score"></div>
+              </div>
+
+              <div class="wrong-card">
+                <div class="wrong-title">틀린 문제 리스트</div>
+                <div id="wrongList" class="wrong-list"></div>
+              </div>
+
+              <form id="goalForm" class="goal-form">
+                <label for="goalInput" class="input-label">오늘의 학습 목표</label>
+                <textarea
+                  id="goalInput"
+                  class="goal-input"
+                  rows="8"
+                  placeholder="예: 음수의 덧셈과 뺄셈에서 부호 규칙을 정확히 이해하고, 최종 시험에서 80점 이상 받기"
+                  required
+                ></textarea>
+
+                <button type="submit" class="primary-btn">목표 저장</button>
+              </form>
+            </div>
+
+            <div id="messageBox" class="message-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/goalsettingmain.js"></script>
+  </body>
+</html>

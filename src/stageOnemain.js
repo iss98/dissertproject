@@ -172,16 +172,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         const batch = writeBatch(db);
 
         items.forEach((item) => {
-        const saved = responses[item.id] || { solution: "", answer: "" };
-        const logRef = doc(collection(db, "itemsolvelogs"));
+            const saved = responses[item.id] || { solution: "", answer: "" };
+            const logRef = doc(collection(db, "itemsolvelogs"));
 
-        batch.set(logRef, {
-            studentId,
-            itemId: item.id,
-            solution: saved.solution || "",
-            answer: saved.answer || "",
-            createdAt: serverTimestamp(),
-        });
+            const studentAnswer = (saved.answer || "").trim();
+            const correctAnswer = (item.answer || "").trim();
+
+            const isCorrect = studentAnswer === correctAnswer ? 1 : 0;
+
+            batch.set(logRef, {
+                studentId,
+                itemId: item.id,
+                solution: saved.solution || "",
+                answer: studentAnswer,
+                correct: isCorrect, 
+                createdAt: serverTimestamp(),
+            });
         });
 
         await batch.commit();

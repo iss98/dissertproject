@@ -3,8 +3,6 @@
   --card-bg: rgba(255, 255, 255, 0.88);
   --card-border: rgba(255, 255, 255, 0.4);
   --primary: #1f6feb;
-  --primary-dark: #1558c0;
-  --primary-soft: #e9f2ff;
   --text-main: #17324d;
   --text-sub: #5c728a;
   --error: #d14343;
@@ -12,8 +10,6 @@
   --shadow-lg: 0 20px 50px rgba(27, 85, 170, 0.16);
   --shadow-md: 0 8px 24px rgba(35, 80, 160, 0.12);
   --radius-xl: 24px;
-  --radius-lg: 18px;
-  --radius-md: 12px;
 }
 
 * {
@@ -80,7 +76,7 @@ body {
   border-radius: 20px;
   background: linear-gradient(135deg, #1f6feb, #5ca3ff);
   color: white;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -132,27 +128,6 @@ body {
 .info-value {
   color: #123c6a;
   font-weight: 800;
-}
-
-.goal-display-card {
-  margin-top: 22px;
-  background: #f7fbff;
-  border: 1px solid #d9e8ff;
-  border-radius: 18px;
-  padding: 18px 20px;
-}
-
-.goal-display-title {
-  color: #1f6feb;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.goal-display-text {
-  color: #17324d;
-  line-height: 1.8;
-  font-weight: 700;
-  white-space: pre-wrap;
 }
 
 .menu-card {
@@ -210,33 +185,15 @@ body {
   transform: translateY(0);
 }
 
-.disabled-btn {
-  background: #eef3fb;
-  color: #97a8bc;
-  border-color: #d8e3f2;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.disabled-btn:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: #d8e3f2;
-}
-
-.final-btn {
+.back-btn {
   background: linear-gradient(135deg, #1f6feb, #4d97ff);
   color: white;
   border-color: transparent;
   box-shadow: 0 14px 30px rgba(31, 111, 235, 0.22);
 }
 
-.final-btn:hover {
+.back-btn:hover {
   box-shadow: 0 18px 34px rgba(31, 111, 235, 0.28);
-}
-
-.hidden {
-  display: none;
 }
 
 .message-box {

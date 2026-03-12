@@ -37,10 +37,10 @@ body {
 }
 
 .page-shell {
-  width: min(1400px, 95vw);
+  width: min(1450px, 96vw);
   min-height: 92vh;
   display: grid;
-  grid-template-columns: 0.9fr 1.3fr;
+  grid-template-columns: 0.9fr 1.5fr;
   gap: 28px;
   padding: 24px;
 }
@@ -53,7 +53,7 @@ body {
 }
 
 .brand-card,
-.menu-card {
+.goal-card {
   width: 100%;
   background: var(--card-bg);
   backdrop-filter: blur(14px);
@@ -63,7 +63,7 @@ body {
 }
 
 .brand-card {
-  min-height: 700px;
+  min-height: 760px;
   padding: 44px;
   display: flex;
   flex-direction: column;
@@ -75,12 +75,12 @@ body {
 }
 
 .brand-badge {
-  width: 72px;
+  width: 90px;
   height: 72px;
   border-radius: 20px;
   background: linear-gradient(135deg, #1f6feb, #5ca3ff);
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -134,40 +134,16 @@ body {
   font-weight: 800;
 }
 
-.goal-display-card {
-  margin-top: 22px;
-  background: #f7fbff;
-  border: 1px solid #d9e8ff;
-  border-radius: 18px;
-  padding: 18px 20px;
-}
-
-.goal-display-title {
-  color: #1f6feb;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.goal-display-text {
-  color: #17324d;
-  line-height: 1.8;
-  font-weight: 700;
-  white-space: pre-wrap;
-}
-
-.menu-card {
-  min-height: 700px;
+.goal-card {
+  min-height: 760px;
   padding: 28px 28px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
-.menu-header {
-  margin-bottom: 26px;
+.goal-header {
+  margin-bottom: 20px;
 }
 
-.menu-header h2 {
+.goal-header h2 {
   margin: 0 0 8px 0;
   font-size: 1.7rem;
   color: #133d70;
@@ -179,64 +155,135 @@ body {
   line-height: 1.6;
 }
 
-.menu-button-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.menu-btn {
+.loading-box {
   width: 100%;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: #f2f8ff;
   border: 1px solid #d7e8ff;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #ffffff, #f4f9ff);
-  color: #17324d;
-  font-size: 1.08rem;
-  font-weight: 800;
-  padding: 22px 24px;
-  text-align: left;
-  cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  box-shadow: 0 10px 24px rgba(35, 80, 160, 0.08);
-}
-
-.menu-btn:hover {
-  transform: translateY(-2px);
-  border-color: #92bcff;
-  box-shadow: 0 14px 28px rgba(31, 111, 235, 0.16);
-}
-
-.menu-btn:active {
-  transform: translateY(0);
-}
-
-.disabled-btn {
-  background: #eef3fb;
-  color: #97a8bc;
-  border-color: #d8e3f2;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.disabled-btn:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: #d8e3f2;
-}
-
-.final-btn {
-  background: linear-gradient(135deg, #1f6feb, #4d97ff);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 14px 30px rgba(31, 111, 235, 0.22);
-}
-
-.final-btn:hover {
-  box-shadow: 0 18px 34px rgba(31, 111, 235, 0.28);
+  color: #28507d;
+  font-weight: 700;
 }
 
 .hidden {
   display: none;
+}
+
+.summary-card,
+.wrong-card {
+  background: #ffffff;
+  border: 1px solid #dceaff;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 8px 24px rgba(35, 80, 160, 0.08);
+  margin-bottom: 18px;
+}
+
+.summary-title,
+.wrong-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1f6feb;
+  margin-bottom: 12px;
+}
+
+.summary-score {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #17324d;
+}
+
+.wrong-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wrong-item {
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: #f9fbff;
+  border: 1px solid #dbe9ff;
+}
+
+.wrong-number {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eaf3ff;
+  color: #1f6feb;
+  font-size: 0.88rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.wrong-stem {
+  color: #17324d;
+  line-height: 1.8;
+  font-weight: 700;
+}
+
+.wrong-empty {
+  color: #15803d;
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.goal-form {
+  margin-top: 10px;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #24496f;
+}
+
+.goal-input {
+  width: 100%;
+  resize: vertical;
+  min-height: 180px;
+  border: 1px solid #cfe0f8;
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 1rem;
+  color: var(--text-main);
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+}
+
+.goal-input:focus {
+  border-color: #72a9ff;
+  box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.12);
+}
+
+.primary-btn {
+  margin-top: 16px;
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #1f6feb, #4d97ff);
+  color: white;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 15px 18px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 12px 24px rgba(31, 111, 235, 0.2);
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(31, 111, 235, 0.24);
+}
+
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .message-box {
@@ -279,7 +326,7 @@ body {
   }
 
   .brand-card,
-  .menu-card {
+  .goal-card {
     min-height: auto;
   }
 }
@@ -292,7 +339,7 @@ body {
   }
 
   .brand-card,
-  .menu-card {
+  .goal-card {
     border-radius: 20px;
   }
 
@@ -300,7 +347,7 @@ body {
     padding: 30px;
   }
 
-  .menu-card {
+  .goal-card {
     padding: 22px 18px;
   }
 
@@ -308,12 +355,7 @@ body {
     font-size: 2rem;
   }
 
-  .menu-header h2 {
+  .goal-header h2 {
     font-size: 1.4rem;
-  }
-
-  .menu-btn {
-    font-size: 1rem;
-    padding: 18px 18px;
   }
 }
