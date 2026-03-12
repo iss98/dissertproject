@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stage 1 - 사전 검사</title>
+    <link rel="stylesheet" href="/stageOneStyles.css" />
+
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)'], ['$', '$']],
+          displayMath: [['\\[', '\\]'], ['$$', '$$']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="page-shell">
+        <div class="left-panel">
+          <div class="brand-card">
+            <div class="brand-badge">S1</div>
+            <h1>Stage 1. 사전 검사</h1>
+            <p>
+              사전 검사는 현재 학습 상태를 확인하기 위한 단계입니다.
+              각 문항을 차분히 읽고 풀이와 답안을 작성해 주세요.
+            </p>
+
+            <div class="student-info-card">
+              <div class="info-row">
+                <span class="info-label">학생 아이디</span>
+                <span id="studentIdText" class="info-value">불러오는 중...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">진행 단계</span>
+                <span class="info-value">Stage 1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="exam-card">
+            <div class="exam-header">
+              <h2>사전 검사 시험지</h2>
+              <p id="examDescription" class="section-desc">
+                문항을 불러오는 중입니다.
+              </p>
+            </div>
+
+            <div id="loadingBox" class="loading-box">문항을 불러오는 중...</div>
+
+            <div id="examArea" class="hidden">
+              <div id="questionNav" class="question-nav"></div>
+
+              <div class="question-card">
+                <div class="question-number" id="currentQuestionNumber">문항 1</div>
+                <div id="questionStem" class="question-text"></div>
+
+                <div class="input-section">
+                  <label for="solutionInput" class="input-label">풀이</label>
+                  <textarea
+                    id="solutionInput"
+                    class="solution-answer"
+                    rows="8"
+                    placeholder="풀이 과정을 작성하세요."
+                  ></textarea>
+                </div>
+
+                <div class="input-section">
+                  <label for="answerInput" class="input-label">답안</label>
+                  <textarea
+                    id="answerInput"
+                    class="solution-answer answer-box"
+                    rows="3"
+                    placeholder="최종 답안을 작성하세요."
+                  ></textarea>
+                </div>
+
+                <div class="nav-button-row" id="navButtonRow"></div>
+              </div>
+            </div>
+
+            <div id="messageBox" class="message-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/stageOnemain.js"></script>
+  </body>
+</html>

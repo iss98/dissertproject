@@ -148,7 +148,21 @@ loginForm.addEventListener("submit", async (e) => {
     localStorage.setItem("studentId", studentId);
 
     // 필요 시 페이지 이동
-    // window.location.href = "/dashboard.html";
+    const stage = Number(studentData.stage);
+
+    if (stage === 1) {
+      window.location.href = "/stageOne.html";
+    } else if (stage === 2) {
+      window.location.href = "/stageTwo.html";
+    } else if (stage === 3) {
+      window.location.href = "/stageThree.html";
+    } else if (stage === 4) {
+      window.location.href = "/stageFour.html";
+    } else if (stage === 5) {
+      window.location.href = "/stageFive.html";
+    } else {
+      showMessage("유효하지 않은 stage 값입니다.", "error");
+    }
   } catch (error) {
     console.error(error);
     showMessage("로그인 중 오류가 발생했습니다.", "error");
@@ -212,6 +226,7 @@ createAccountsForm.addEventListener("submit", async (e) => {
         studentNumber: number,
         role: "student",
         experiment: experiment,
+        stage : 1,
         createdAt: serverTimestamp(),
       });
 
