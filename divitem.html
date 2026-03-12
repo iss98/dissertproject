@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>음수의 나눗셈 - 문제 풀기</title>
+    <link rel="stylesheet" href="/plusitemStyles.css" />
+
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)'], ['$', '$']],
+          displayMath: [['\\[', '\\]'], ['$$', '$$']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="page-shell">
+        <div class="left-panel">
+          <div class="brand-card">
+            <div class="brand-badge">ITEM</div>
+            <h1>음수의 나눗셈 문제 풀기</h1>
+            <p>
+              음수의 나눗셈과 관련된 문제를 한 문제씩 풀어봅시다.
+              각 문항에서 풀이와 답안을 작성한 뒤 문제 제출 버튼을 눌러 주세요.
+            </p>
+
+            <div class="student-info-card">
+              <div class="info-row">
+                <span class="info-label">학생 아이디</span>
+                <span id="studentIdText" class="info-value">불러오는 중...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">학습 주제</span>
+                <span class="info-value">음수의 나눗셈</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="exam-card">
+            <div class="exam-header">
+              <h2>문제 풀기</h2>
+              <p id="examDescription" class="section-desc">
+                문항을 불러오는 중입니다.
+              </p>
+            </div>
+
+            <div id="loadingBox" class="loading-box">문항을 불러오는 중...</div>
+
+            <div id="examArea" class="hidden">
+              <div class="top-action-row">
+                <button type="button" id="backBtn" class="secondary-btn">← 돌아가기</button>
+              </div>
+
+              <div id="questionNav" class="question-nav"></div>
+
+              <div class="question-card">
+                <div class="question-title-row">
+                  <div class="question-number" id="currentQuestionNumber">문항 1</div>
+                  <div id="questionStatusBadge" class="question-status-badge hidden"></div>
+                </div>
+
+                <div id="questionStem" class="question-text"></div>
+
+                <div class="input-section">
+                  <label for="solutionInput" class="input-label">풀이</label>
+                  <textarea
+                    id="solutionInput"
+                    class="solution-answer"
+                    rows="8"
+                    placeholder="풀이 과정을 작성하세요."
+                  ></textarea>
+                </div>
+
+                <div class="input-section">
+                  <label for="answerInput" class="input-label">답안</label>
+                  <textarea
+                    id="answerInput"
+                    class="solution-answer answer-box"
+                    rows="3"
+                    placeholder="최종 답안을 작성하세요."
+                  ></textarea>
+                </div>
+
+                <div class="arrow-row" id="arrowRow"></div>
+
+                <div class="submit-row">
+                    <button type="button" id="submitBtn" class="submit-btn">
+                        문제 제출
+                    </button>
+                </div>
+
+                <div class="ask-row">
+                    <button type="button" id="askBtn" class="ask-btn">
+                        질문하기
+                    </button>
+                </div>
+
+              </div>
+            </div>
+
+            <div id="messageBox" class="message-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/divitemmain.js"></script>
+  </body>
+</html>
