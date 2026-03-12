@@ -6,6 +6,7 @@ import {
   doc,
   writeBatch,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 
@@ -162,35 +163,41 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function submitAllResponses() {
     try {
-      clearMessage();
-      saveCurrentResponse();
+        clearMessage();
+        saveCurrentResponse();
 
-      const finalSubmitBtn = document.getElementById("finalSubmitBtn");
-      if (finalSubmitBtn) finalSubmitBtn.disabled = true;
+        const finalSubmitBtn = document.getElementById("finalSubmitBtn");
+        if (finalSubmitBtn) finalSubmitBtn.disabled = true;
 
-      const batch = writeBatch(db);
+        const batch = writeBatch(db);
 
-      items.forEach((item) => {
+        items.forEach((item) => {
         const saved = responses[item.id] || { solution: "", answer: "" };
         const logRef = doc(collection(db, "itemsolvelogs"));
 
         batch.set(logRef, {
-          studentId,
-          itemId: item.id,
-          solution: saved.solution || "",
-          answer: saved.answer || "",
-          createdAt: serverTimestamp(),
+            studentId,
+            itemId: item.id,
+            solution: saved.solution || "",
+            answer: saved.answer || "",
+            createdAt: serverTimestamp(),
         });
-      });
+        });
 
-      await batch.commit();
+        await batch.commit();
 
-      showMessage("모든 답안이 성공적으로 제출되었습니다.", "success");
+        const studentRef = doc(db, "students", studentId);
+        await updateDoc(studentRef, {
+            stage: 2,
+        });
+
+        alert("성공적으로 제출되었습니다. 다음 단계로 이동합니다.");
+        window.location.href = "/stageTwo.html";
     } catch (error) {
-      console.error(error);
-      showMessage("최종 제출 중 오류가 발생했습니다.", "error");
+        console.error(error);
+        showMessage("최종 제출 중 오류가 발생했습니다.", "error");
     }
-  }
+    }
 
   try {
     const itemsRef = collection(db, "items");

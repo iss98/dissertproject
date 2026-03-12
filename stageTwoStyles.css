@@ -40,7 +40,7 @@ body {
   width: min(1400px, 95vw);
   min-height: 92vh;
   display: grid;
-  grid-template-columns: 0.9fr 1.5fr;
+  grid-template-columns: 0.9fr 1.3fr;
   gap: 28px;
   padding: 24px;
 }
@@ -53,7 +53,7 @@ body {
 }
 
 .brand-card,
-.exam-card {
+.survey-card {
   width: 100%;
   background: var(--card-bg);
   backdrop-filter: blur(14px);
@@ -134,17 +134,16 @@ body {
   font-weight: 800;
 }
 
-.exam-card {
+.survey-card {
   min-height: 700px;
   padding: 28px 28px 24px;
-  overflow: hidden;
 }
 
-.exam-header {
+.survey-header {
   margin-bottom: 20px;
 }
 
-.exam-header h2 {
+.survey-header h2 {
   margin: 0 0 8px 0;
   font-size: 1.7rem;
   color: #133d70;
@@ -156,56 +155,17 @@ body {
   line-height: 1.6;
 }
 
-.loading-box {
-  width: 100%;
-  padding: 18px 20px;
-  border-radius: 16px;
-  background: #f2f8ff;
-  border: 1px solid #d7e8ff;
-  color: #28507d;
-  font-weight: 700;
-}
-
-.hidden {
-  display: none;
-}
-
-.question-nav {
+.survey-form {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.question-nav-btn {
-  width: 44px;
-  height: 44px;
-  border: 1px solid #cfe0f8;
-  border-radius: 12px;
-  background: white;
-  color: #3e5d82;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-.question-nav-btn:hover {
-  border-color: #7caeff;
-  background: #f4f9ff;
-}
-
-.question-nav-btn.active {
-  background: linear-gradient(135deg, #1f6feb, #4d97ff);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 10px 20px rgba(31, 111, 235, 0.18);
+  flex-direction: column;
+  gap: 18px;
 }
 
 .question-card {
   background: #ffffff;
   border: 1px solid #dceaff;
   border-radius: 20px;
-  padding: 24px 24px 20px;
+  padding: 22px 22px 20px;
   box-shadow: 0 8px 24px rgba(35, 80, 160, 0.08);
 }
 
@@ -226,83 +186,82 @@ body {
   font-size: 1.05rem;
   font-weight: 700;
   color: #17324d;
-  line-height: 1.8;
-  margin-bottom: 22px;
-  white-space: normal;
-  min-height: 100px;
-}
-
-.input-section {
+  line-height: 1.7;
   margin-bottom: 18px;
 }
 
-.input-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #24496f;
+.likert-scale {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  gap: 14px;
+  align-items: center;
 }
 
-.solution-answer {
-  width: 100%;
-  resize: vertical;
-  border: 1px solid #cfe0f8;
-  background: white;
-  border-radius: 14px;
-  padding: 14px 16px;
-  font-size: 1rem;
-  color: var(--text-main);
-  outline: none;
-  transition: all 0.2s ease;
-  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+.scale-label {
+  font-size: 0.9rem;
+  color: #5c728a;
+  font-weight: 700;
 }
 
-.solution-answer:focus {
-  border-color: #72a9ff;
-  box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.12);
+.scale-label.left {
+  text-align: left;
 }
 
-.answer-box {
-  min-height: 84px;
+.scale-label.right {
+  text-align: right;
 }
 
-.nav-button-row {
+.likert-options {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.likert-option {
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 26px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dbe9ff;
+  border-radius: 14px;
+  padding: 14px 8px;
+  background: #f9fbff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-weight: 800;
+  color: #20456c;
 }
 
-.nav-btn {
+.likert-option:hover {
+  border-color: #8db7ff;
+  background: #f2f7ff;
+}
+
+.likert-option input[type="radio"] {
+  margin: 0;
+}
+
+.primary-btn {
+  margin-top: 10px;
+  width: 100%;
   border: none;
   border-radius: 16px;
-  padding: 14px 20px;
-  font-size: 1rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
-}
-
-.primary-btn,
-.submit-btn {
   background: linear-gradient(135deg, #1f6feb, #4d97ff);
   color: white;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 15px 18px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
   box-shadow: 0 12px 24px rgba(31, 111, 235, 0.2);
-  margin-left: auto;
 }
 
-.secondary-btn {
-  background: #eef5ff;
-  color: #1f6feb;
-  border: 1px solid #d5e5ff;
-}
-
-.nav-btn:hover {
+.primary-btn:hover {
   transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(31, 111, 235, 0.24);
 }
 
-.nav-btn:disabled {
+.primary-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -347,8 +306,19 @@ body {
   }
 
   .brand-card,
-  .exam-card {
+  .survey-card {
     min-height: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .likert-scale {
+    grid-template-columns: 1fr;
+  }
+
+  .scale-label.left,
+  .scale-label.right {
+    text-align: left;
   }
 }
 
@@ -360,7 +330,7 @@ body {
   }
 
   .brand-card,
-  .exam-card {
+  .survey-card {
     border-radius: 20px;
   }
 
@@ -368,7 +338,7 @@ body {
     padding: 30px;
   }
 
-  .exam-card {
+  .survey-card {
     padding: 22px 18px;
   }
 
@@ -376,84 +346,12 @@ body {
     font-size: 2rem;
   }
 
-  .exam-header h2 {
+  .survey-header h2 {
     font-size: 1.4rem;
   }
 
-  .nav-button-row {
-    flex-direction: column;
-  }
-
-  .primary-btn,
-  .submit-btn,
-  .secondary-btn {
-    width: 100%;
-    margin-left: 0;
-  }
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(10, 30, 60, 0.35);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 20px;
-}
-
-.modal-card {
-  width: min(420px, 92vw);
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 24px;
-  box-shadow: 0 24px 60px rgba(20, 60, 130, 0.22);
-  padding: 32px 28px 26px;
-  text-align: center;
-  animation: modalPop 0.22s ease;
-}
-
-.modal-icon {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 18px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1f6feb, #5ca3ff);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 900;
-  box-shadow: 0 12px 30px rgba(31, 111, 235, 0.28);
-}
-
-.modal-card h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.45rem;
-  color: #123c6a;
-}
-
-.modal-card p {
-  margin: 0 0 22px 0;
-  color: #5c728a;
-  line-height: 1.7;
-  font-size: 1rem;
-}
-
-.modal-btn {
-  width: 100%;
-}
-
-@keyframes modalPop {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  .likert-options {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
   }
 }

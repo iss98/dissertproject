@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stage 2 - 사전 정의 검사</title>
+    <link rel="stylesheet" href="/stageTwoStyles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="page-shell">
+        <div class="left-panel">
+          <div class="brand-card">
+            <div class="brand-badge">S2</div>
+            <h1>Stage 2. 사전 정의 검사</h1>
+            <p>
+              다음 문항에 대해 자신의 생각과 느낌을 가장 잘 나타내는 정도를 선택해 주세요.
+            </p>
+
+            <div class="student-info-card">
+              <div class="info-row">
+                <span class="info-label">학생 아이디</span>
+                <span id="studentIdText" class="info-value">불러오는 중...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">진행 단계</span>
+                <span class="info-value">Stage 2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="survey-card">
+            <div class="survey-header">
+              <h2>사전 정의 검사</h2>
+              <p class="section-desc">
+                각 문항에 대해 1점에서 5점까지 선택해 주세요.
+              </p>
+            </div>
+
+            <form id="affectiveForm" class="survey-form">
+              <div class="question-card">
+                <div class="question-number">문항 1</div>
+                <div class="question-text">당신은 수학을 좋아하십니까?</div>
+
+                <div class="likert-scale">
+                  <span class="scale-label left">전혀 그렇지 않다</span>
+                  <div class="likert-options">
+                    <label class="likert-option">
+                      <input type="radio" name="question1" value="1" required />
+                      <span>1</span>
+                    </label>
+                    <label class="likert-option">
+                      <input type="radio" name="question1" value="2" />
+                      <span>2</span>
+                    </label>
+                    <label class="likert-option">
+                      <input type="radio" name="question1" value="3" />
+                      <span>3</span>
+                    </label>
+                    <label class="likert-option">
+                      <input type="radio" name="question1" value="4" />
+                      <span>4</span>
+                    </label>
+                    <label class="likert-option">
+                      <input type="radio" name="question1" value="5" />
+                      <span>5</span>
+                    </label>
+                  </div>
+                  <span class="scale-label right">매우 그렇다</span>
+                </div>
+              </div>
+
+              <div class="question-card">
+                <div class="question-number">문항 2</div>
+                <div class="question-text">당신은 AI를 좋아하십니까?</div>
+
+                <div class="likert-scale">
+                  <span class="scale-label left">전혀 그렇지 않다</span>
+                  <div class="likert-options">
+                    <label class="likert-option">
+                      <input type="radio" name="question2" value="1" required />
+                      <span>1</span>
+                    </label>
+                    <label class="likert-option">
+                      <input type="radio" name="question2" value="2" />
+                      <span>2</span>
+                    </label>
+                    <label class="likert-option">
+                      <input type="radio" name="question2" value="3" />
+                      <span>3</span>
+                    </label>
+                    <label class="likert-option">
+                      <input type="radio" name="question2" value="4" />
+                      <span>4</span>
+                    </label>
+                    <label class="likert-option">
+                      <input type="radio" name="question2" value="5" />
+                      <span>5</span>
+                    </label>
+                  </div>
+                  <span class="scale-label right">매우 그렇다</span>
+                </div>
+              </div>
+
+              <button type="submit" class="primary-btn">응답 제출</button>
+            </form>
+
+            <div id="messageBox" class="message-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/stageTwomain.js"></script>
+  </body>
+</html>
