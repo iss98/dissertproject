@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>음수의 곱셈 - 학습한 내용 정리하기</title>
+    <link rel="stylesheet" href="/plusreflectionStyles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="page-shell">
+        <div class="left-panel">
+          <div class="brand-card">
+            <div class="brand-badge">REF</div>
+            <h1>학습한 내용 정리하기</h1>
+            <p>
+              학습한 내용을 자신의 언어로 정리하고, 목표 달성을 위해 앞으로 어떻게 공부할지 계획해 봅시다.
+            </p>
+
+            <div class="student-info-card">
+              <div class="info-row">
+                <span class="info-label">학생 아이디</span>
+                <span id="studentIdText" class="info-value">불러오는 중...</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">학습 주제</span>
+                <span class="info-value">음수의 곱셈</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="reflection-card">
+            <div class="reflection-header">
+              <h2>학습한 내용 정리하기</h2>
+              <p class="section-desc">
+                음수의 곱셈에서 어떤 내용을 배웠는지 정리해보자. 그리고 설정한 학습 목표를 달성하기 위해서 어떻게 학습할지 정리해보자.
+              </p>
+            </div>
+
+            <form id="reflectionForm" class="reflection-form">
+              <label for="reflectionInput" class="input-label">학습 내용 정리</label>
+              <textarea
+                id="reflectionInput"
+                class="reflection-input"
+                rows="12"
+                placeholder="예: 음수의 곱셈에서는 절댓값을 비교하고 부호를 결정하는 방법을 배웠다. 앞으로는 부호가 다른 두 수의 곱셈을 더 연습해서 실수를 줄이고 싶다."
+                required
+              ></textarea>
+
+              <div class="button-row">
+                <button type="button" id="backBtn" class="secondary-btn">돌아가기</button>
+                <button type="submit" class="primary-btn">저장하기</button>
+              </div>
+            </form>
+
+            <div id="messageBox" class="message-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/mulreflectionmain.js"></script>
+  </body>
+</html>
