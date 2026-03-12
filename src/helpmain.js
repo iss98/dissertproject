@@ -190,9 +190,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function buildPromptForCurrentStudent(itemData) {
-    const studentState = await getStudentState(studentId, itemId);
-    const studentMisconception = await getStudentMisconception(studentId, itemId);
-    const latestSolveLog = await loadLatestSolveLog();
+    const studentState = await getStudentState();
+    const studentMisconception = await getStudentMisconception();
 
     const itemstem = itemData.stem || "";
     const itemsolution = itemData.solution || "";
@@ -207,8 +206,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       itemsolution,
       itemanswer,
       itemcognitiveAttribute,
-      itemitemAnalysis,
-      latestSolveLog,
+      itemitemAnalysis
     });
 
     return prompt;

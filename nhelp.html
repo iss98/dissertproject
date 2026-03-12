@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>질문하기</title>
+    <link rel="stylesheet" href="/helpStyles.css" />
+
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)'], ['$', '$']],
+          displayMath: [['\\[', '\\]'], ['$$', '$$']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="page-shell">
+        <div class="left-panel">
+          <div class="brand-card">
+            <div class="brand-badge">HELP</div>
+            <h1>질문하기</h1>
+            <p>
+              문제를 분석하고, 궁금한 점을 질문하면서 해결 방향을 찾아봅시다.
+            </p>
+
+            <button id="backBtn" class="secondary-btn">← 돌아가기</button>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="chat-card">
+            <div class="chat-header">
+              <h2>현재 문제</h2>
+              <p class="section-desc">아래 문제를 바탕으로 질문할 수 있습니다.</p>
+            </div>
+
+            <div id="loadingBox" class="loading-box">문항을 불러오는 중...</div>
+
+            <div id="contentArea" class="hidden">
+              <div class="question-card">
+                <div id="questionStem" class="question-text"></div>
+              </div>
+
+              <div id="chatMessages" class="chat-messages"></div>
+
+              <form id="chatForm" class="chat-input-wrap">
+                <textarea
+                  id="chatInput"
+                  class="chat-input"
+                  rows="3"
+                  placeholder="질문을 입력하세요."
+                  required
+                ></textarea>
+                <button type="submit" id="sendBtn" class="primary-btn">전송</button>
+              </form>
+            </div>
+
+            <div id="messageBox" class="message-box"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/nhelpmain.js"></script>
+  </body>
+</html>
