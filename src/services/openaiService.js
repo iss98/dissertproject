@@ -14,3 +14,13 @@ export async function fetchHelpResponse({ input }) {
     },
   });
 }
+
+export async function getResponse({input}) {
+  return await openai.responses.create({
+    model : "gpt-5",
+    input : input,
+    text: {
+      format: { type: "text" },
+    },
+  });
+}

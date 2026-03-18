@@ -1,3 +1,10 @@
+import { getResponse } from "../services/openaiService.js";
+import { db } from "../../firebaseConfig.js";
+import {
+  doc,
+  getDoc,
+} from "firebase/firestore";
+
 export async function buildHelpPrompt({
   studentState,
   studentMisconception,
@@ -16,12 +23,12 @@ export async function buildHelpPrompt({
 학생의 문제 분석이 적절했다면 다음과 같이 답변하여 질문이 필요한지 분석하는 단계로 넘어가세요: "문제에 대한 분석을 잘했어. 그러면 지금 문제를 풀다가 막힌 이유가 뭐야?" 
 
 2. 질문이 필요한지 분석하기
-학생은 문제 분석하기 단계 이후 자신이 풀다가 막힌 이유를 얘기할 것입니다. 당신은 학생의 [인지상태]와 [오개념 리스트]를 이용하여 학생이 자신이 어려움을 경험하는 이유를 정확하게 파악하고 질문이 필요한지 판단하도록 질문하기 과정을 이어나가면 됩니다. 
+학생은 문제 분석하기 단계 이후 자신이 풀다가 막힌 이유를 얘기할 것입니다. 당신은 학생의 [문제를 맞출 확률]과 [오개념 리스트]를 이용하여 학생이 자신이 어려움을 경험하는 이유를 정확하게 파악하고 질문이 필요한지 판단하도록 질문하기 과정을 이어나가면 됩니다. 
 학생이 자신이 풀다가 막힌 이유를 대답한 다음에 학생이 말한 내용에 공감을 해주며 다음과 같이 답변하세요: "그렇다면 문제를 풀기 위해서는 질문이 필요할 것 같아?"
 학생이 질문이 필요한지에 대한 대답을 한 이후에는 학생의 대답에 따라 다음과 같이 답변하세요.
 학생이 질문이 필요없다고 하는 경우에는 다음과 같이 답변하세요: "너는 충분히 너의 힘으로 풀 수 있을거야! 다시 풀다가 막히게 된다면 언제든지 질문해줘:)"
-학생이 질문이 필요하다고 했지만, 학생의 [인지상태]와 [오개념 리스트]를 바탕으로 분석한 결과 학생이 스스로 문제를 풀 수 있다고 판단되는 경우 다음과 같이 답변하세요: "그렇다면 문제에 대한 분석과 너가 막힌 부분을 바탕으로 질문을 해볼래? 근데 너는 충분히 문제를 스스로의 힘으로도 풀 수 있을 것 같아"
-학생이 질문이 필요하다고 하며 학생의 [인지상태]와 [오개념 리스트]를 바탕으로 분석한 결과 학생이 스스로 문제를 풀 수 없다고 판단되는 경우 학생이 질문을 구성하도록 돕는 메타인지 질문을 하면 됩니다. 학생의 [인지상태], [오개념 리스트] 그리고 학생이 분석한 자신이 막힌 부분을 바탕으로 메타인지 질문을 구성하세요.
+학생이 질문이 필요하다고 했지만, 학생의 [문제를 맞출 확률]과 [오개념 리스트]를 바탕으로 분석한 결과 학생이 스스로 문제를 풀 수 있다고 판단되는 경우 다음과 같이 답변하세요: "그렇다면 문제에 대한 분석과 너가 막힌 부분을 바탕으로 질문을 해볼래? 근데 너는 충분히 문제를 스스로의 힘으로도 풀 수 있을 것 같아"
+학생이 질문이 필요하다고 하며 학생의 [문제를 맞출 확률]과 [오개념 리스트]를 바탕으로 분석한 결과 학생이 스스로 문제를 풀 수 없다고 판단되는 경우 학생이 질문을 구성하도록 돕는 메타인지 질문을 하면 됩니다. 학생의 [문제를 맞출 확률]과 [오개념 리스트] 그리고 학생이 분석한 자신이 막힌 부분을 바탕으로 메타인지 질문을 구성하세요.
 학생이 질문을 했다고 판단되면 질문하기 단계로 넘어가줘
 
 3. 질문하기 
@@ -45,7 +52,7 @@ ${itemitemAnalysis}
 <필요한 인지 요소> 
 ${itemcognitiveAttribute}
 
-[학생의 인지 상태]
+[학생이 문제를 맞출 확률]
 ${studentState}
 
 [학생의 오개념 리스트]
@@ -55,12 +62,108 @@ ${studentMisconception}
   return systemPrompt;
 }
 
-export async function getStudentState() {
+export async function getStudentState(itemData, attemptLog) {
+  let prompt = `
+  당신은 지침을 엄격하게 준수해야 합니다. 당신의 역할은 지금까지 학생의 문제 풀이 로그를 보고 학생이 [target 문제]를 맞출 확률을 예측하는 것입니다. 학생이 문제를 맞출 확률은 0과 1 사이의 실숫값으로 표현되어야 합니다. 0은 문제를 전혀 못맞출 것 같다는 의미이며 1은 문제를 완벽히 맞출 것 같다는 의미입니다. 출력은 반드시 예측한 실숫값만 해야합니다. 학생의 문제 풀이 로그는 아래와 같습니다.
+  \n`
+  let i = 0;
 
-    return 0.8;
+  for (const log of attemptLog) {
+    console.log(log)
+    const tId = log.itemId;
+    const itemRef = doc(db, "items", tId);
+    const itemSnap = await getDoc(itemRef);
+    const itemData = itemSnap.data();
+    const itemstem = itemData.stem || "";
+    const itemsolution = itemData.solution || "";
+    const itemanswer = itemData.answer || "";
+    const itemcognitiveAttribute = itemData.cognitiveAttribute || "";
+
+    prompt += `
+    [문제 풀이 로그 ${i+1}]
+    <stem>
+    ${itemstem}
+    <solution>
+    ${itemsolution}
+    <answer>
+    ${itemanswer}
+    <필요한 인지 요소>
+    ${itemcognitiveAttribute}
+    <학생의 풀이 과정>
+    ${log.solution}
+    <학생의 풀이 결과>
+    ${log.answer}
+    \n`
+    i++;
+  }
+
+  prompt += `
+  [target 문제]
+  <stem>
+  ${itemData.stem}
+  <solution>
+  ${itemData.solution}
+  <answer>
+  ${itemData.answer}
+  <필요한 인지 요소>
+  ${itemData.cognitiveAttribute}
+  \n`
+
+  const response = await getResponse({input: prompt});
+
+  console.log("=== 학생 상태 예측 프롬프트 ===");
+  console.log(prompt);
+  console.log("=== 학생 상태 예측 결과 ===");
+  console.log(response.output_text);
+  return response.output_text || "예측 과정에서 에러가 생김 : 0.5";
 }
 
-export async function getStudentMisconception() {
+export async function getStudentMisconception(attemptLog) {
+  let prompt = `
+  당신은 지침을 엄격하게 준수해야 합니다. 당신의 역할은 지금까지 학생의 문제 풀이 로그를 보고 학생이 가지고 있을 것으로 예상되는 오개념을 예측하는 것입니다. 오개념의 유형은 [오개념 리스트]를 확인하면 됩니다. 반드시 [오개념 리스트] 안에 있는 오개념을 출력해야 하며, 학생의 오개념이 없다고 판단되는 경우 "오개념 없음"이라고 출력하면 됩니다. 학생의 오개념이 여러개라면 모두 출력해야 합니다.
+  [오개념 리스트]
+  <개념적 오류 음수의 덧셈 : 음수가 들어간 덧셈을 하는 법을 이해하지 못했다>
+  <개념적 오류 음수의 뺄셈 : 음수가 들어간 뺄셈을 하는 법을 이해하지 못했다>
+  <개념적 오류 음수의 곱셈 : 음수가 들어간 곱셈을 하는 법을 이해하지 못했다>
+  <개념적 오류 음수의 나눗셈 : 음수가 들어간 나눗셈을 하는 법을 이해하지 못했다>
+  <절차적 오류 연산 실수 - 부호 : 연산을 진행하다가 수의 부호를 바꾸는 실수를 한다>
+  <절차적 오류 연산 실수 - 연산 : 연산을 진행하다가 연산기호를 바꾸는 실수를 한다>
+  <전략적 오류 문제의 구조 - 덧셈과 뺄셈 : 문제의 조건을 바탕으로 덧셈과 뺄셈에 대한 식을 세울 수 없다>
+  <전략적 오류 문제의 구조 - 곱셈과 나눗셈 : 문제의 조건을 바탕으로 곱셈과 나눗셈에 대한 식을 세울 수 없다>
+  `
+  let i = 0;
+  for (const log of attemptLog) {
+    const tId = log.itemId;
+    const itemRef = doc(db, "items", tId);
+    const itemSnap = await getDoc(itemRef);
+    const itemData = itemSnap.data();
+    const itemstem = itemData.stem || "";
+    const itemsolution = itemData.solution || "";
+    const itemanswer = itemData.answer || "";
+    const itemcognitiveAttribute = itemData.cognitiveAttribute || "";
 
-    return "음수의 덧셈 : 음수의 덧셈에 대한 이해가 부족함";
+    prompt += `
+    [문제 풀이 로그 ${i+1}]
+    <stem>
+    ${itemstem}
+    <solution>
+    ${itemsolution}
+    <answer>
+    ${itemanswer}
+    <필요한 인지 요소>
+    ${itemcognitiveAttribute}
+    <학생의 풀이 과정>
+    ${log.solution}
+    <학생의 풀이 결과>
+    ${log.answer}
+    \n`
+    i++;
+  }
+
+  console.log("=== 오개념 분석 프롬프트 ===");
+  console.log(prompt);
+  const response = await getResponse({input: prompt});
+  console.log("=== 오개념 분석 결과 ===");
+  console.log(response.output_text);
+  return response.output_text || "오개념 분석 중 문제가 생김 : 오개념 없음";
 }

@@ -7,6 +7,8 @@ import {
   query,
   serverTimestamp,
   where,
+  orderBy,
+  limit
 } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 import {
@@ -34,6 +36,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let currentChatId = null;
   let currentSystemPrompt = "";
+  let studentState = "";
+  let studentMisconception = "";
   let currentItemData = null;
   let localMessages = [];
 
@@ -85,7 +89,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  async function getOrCreateChat() {
+  // async function getOrCreateChat(studentState, studentMisconception) {
+  //   const chatQuery = query(
+  //     collection(db, "chat"),
+  //     where("studentId", "==", studentId),
+  //     where("itemId", "==", itemId)
+  //   );
+
+  //   const chatSnapshot = await getDocs(chatQuery);
+
+  //   if (!chatSnapshot.empty) {
+  //     const chats = chatSnapshot.docs.map((docItem) => ({
+  //       id: docItem.id,
+  //       ...docItem.data(),
+  //     }));
+
+  //     chats.sort((a, b) => {
+  //       const aSec = a.createdAt?.seconds || 0;
+  //       const bSec = b.createdAt?.seconds || 0;
+  //       return bSec - aSec;
+  //     });
+
+  //     return chats[0].id;
+  //   }
+
+  //   const newChatRef = await addDoc(collection(db, "chat"), {
+  //     studentId,
+  //     itemId,
+  //     studentState,
+  //     studentMisconception,
+  //     createdAt: serverTimestamp(),
+  //   });
+
+  //   return newChatRef.id;
+  // }
+
+  async function findLatestChat() {
     const chatQuery = query(
       collection(db, "chat"),
       where("studentId", "==", studentId),
@@ -94,30 +133,58 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const chatSnapshot = await getDocs(chatQuery);
 
-    if (!chatSnapshot.empty) {
-      const chats = chatSnapshot.docs.map((docItem) => ({
-        id: docItem.id,
-        ...docItem.data(),
-      }));
+    if (chatSnapshot.empty) return null;
 
-      chats.sort((a, b) => {
-        const aSec = a.createdAt?.seconds || 0;
-        const bSec = b.createdAt?.seconds || 0;
-        return bSec - aSec;
-      });
+    const chats = chatSnapshot.docs.map((docItem) => ({
+      id: docItem.id,
+      ...docItem.data(),
+    }));
 
-      return chats[0].id;
-    }
+    chats.sort((a, b) => {
+      const aSec = a.createdAt?.seconds || 0;
+      const bSec = b.createdAt?.seconds || 0;
+      return bSec - aSec;
+    });
+
+    return chats[0];
+  }
+
+  async function createNewChatSession() {
+    const attemptlog = await loadLatestSolveLogs();
+
+    const [prompt, state, misconception] =
+      await buildPromptForCurrentStudent(currentItemData, attemptlog);
+
+    currentSystemPrompt = prompt;
+    studentState = state;
+    studentMisconception = misconception;
 
     const newChatRef = await addDoc(collection(db, "chat"), {
       studentId,
       itemId,
+      studentState,
+      studentMisconception,
+      systemPrompt: prompt,
       createdAt: serverTimestamp(),
     });
 
-    return newChatRef.id;
-  }
+    currentChatId = newChatRef.id;
 
+    const initialAssistantMessage =
+      "질문하기를 잘 눌렀어! 모르는 문제를 질문을 통해 풀 수 있게 되면 원하는 학습 목표를 달성할 수 있을거야:) 그러면 일단 질문하는 문제에서 구하고자 하는 것과 문제를 풀기 위한 방법을 한 번 분석해볼까?";
+
+    await saveMessage(currentChatId, "assistant", initialAssistantMessage);
+
+    localMessages = [
+      {
+        role: "assistant",
+        content: initialAssistantMessage,
+      },
+    ];
+
+    renderMessages();
+  }
+  
   async function loadMessages(chatId) {
     const messagesRef = collection(db, "chat", chatId, "messages");
     const snapshot = await getDocs(messagesRef);
@@ -162,17 +229,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     return input;
   }
 
-  async function loadLatestSolveLog() {
+  async function loadLatestSolveLogs() {
     const logsQuery = query(
       collection(db, "itemsolvelogs"),
       where("studentId", "==", studentId),
-      where("itemId", "==", itemId)
+      orderBy("createdAt", "desc"),
+      limit(30)
     );
 
     const logsSnapshot = await getDocs(logsQuery);
 
     if (logsSnapshot.empty) {
-      return null;
+      return [];
     }
 
     const logs = logsSnapshot.docs.map((logDoc) => ({
@@ -180,18 +248,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       ...logDoc.data(),
     }));
 
-    logs.sort((a, b) => {
-      const aSec = a.createdAt?.seconds || 0;
-      const bSec = b.createdAt?.seconds || 0;
-      return bSec - aSec;
-    });
-
-    return logs[0];
+    return logs;
   }
 
-  async function buildPromptForCurrentStudent(itemData) {
-    const studentState = await getStudentState();
-    const studentMisconception = await getStudentMisconception();
+  async function buildPromptForCurrentStudent(itemData, attemptLog) {
+    const studentState = await getStudentState(itemData, attemptLog);
+    const studentMisconception = await getStudentMisconception(attemptLog);
 
     const itemstem = itemData.stem || "";
     const itemsolution = itemData.solution || "";
@@ -209,14 +271,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       itemitemAnalysis
     });
 
-    return prompt;
+    return [prompt, studentState, studentMisconception];
   }
 
   async function requestAssistantResponse() {
     const input = convertToOpenAIInput(currentSystemPrompt, localMessages);
 
-    console.log("=== OpenAI Input ===");
-    console.log(JSON.stringify(input, null, 2));
+    // console.log("=== OpenAI Input ===");
+    // console.log(JSON.stringify(input, null, 2));
     const response = await fetchHelpResponse({ input });
 
     const outputText =
@@ -238,13 +300,67 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.href = returnTo;
   });
 
+  // try {
+  //   if (!itemId) {
+  //     throw new Error("문항 정보가 없습니다.");
+  //   }
+
+  //   // 처음에는 챗봇 생성 안내만 보이게
+  //   loadingBox.textContent = "챗봇을 만드는 중입니다. 잠시만 기다려주세요.";
+
+  //   const itemRef = doc(db, "items", itemId);
+  //   const itemSnap = await getDoc(itemRef);
+
+  //   if (!itemSnap.exists()) {
+  //     throw new Error("문항을 찾을 수 없습니다.");
+  //   }
+
+  //   //
+  //   const attemptlog = await loadLatestSolveLogs();
+
+  //   currentItemData = itemSnap.data();
+  //   questionStem.innerHTML = currentItemData.stem || "문항 내용이 없습니다.";
+
+  //   // 프롬프트 생성
+  //   [currentSystemPrompt, studentState, studentMisconception] = await buildPromptForCurrentStudent(currentItemData, attemptlog);
+
+  //   // 채팅 세션 준비
+  //   currentChatId = await getOrCreateChat(studentState, studentMisconception);
+
+  //   const loadedMessages = await loadMessages(currentChatId);
+  //   localMessages = loadedMessages.map((msg) => ({
+  //     role: msg.role,
+  //     content: msg.content,
+  //   }));
+
+  //   // 처음 입장한 세션이면 AI 첫 발화 저장
+  //   if (localMessages.length === 0) {
+  //     const initialAssistantMessage =
+  //       "질문하기를 잘 눌렀어! 모르는 문제를 질문을 통해 풀 수 있게 되면 원하는 학습 목표를 달성할 수 있을거야:) 그러면 일단 질문하는 문제에서 구하고자 하는 것과 문제를 풀기 위한 방법을 한 번 분석해볼까?";
+
+  //     await saveMessage(currentChatId, "assistant", initialAssistantMessage);
+  //     localMessages.push({
+  //       role: "assistant",
+  //       content: initialAssistantMessage,
+  //     });
+  //   }
+
+  //   loadingBox.classList.add("hidden");
+  //   contentArea.classList.remove("hidden");
+  //   renderMessages();
+  //   await renderMath();
+  // } catch (error) {
+  //   console.error(error);
+  //   loadingBox.classList.add("hidden");
+  //   showMessage(error.message || "챗봇을 준비하는 중 오류가 발생했습니다.", "error");
+  // }
+
   try {
     if (!itemId) {
       throw new Error("문항 정보가 없습니다.");
     }
 
-    // 처음에는 챗봇 생성 안내만 보이게
-    loadingBox.textContent = "챗봇을 만드는 중입니다. 잠시만 기다려주세요.";
+    loadingBox.textContent = "챗봇을 준비하는 중입니다. 잠시만 기다려주세요.";
 
     const itemRef = doc(db, "items", itemId);
     const itemSnap = await getDoc(itemRef);
@@ -256,28 +372,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     currentItemData = itemSnap.data();
     questionStem.innerHTML = currentItemData.stem || "문항 내용이 없습니다.";
 
-    // 프롬프트 생성
-    currentSystemPrompt = await buildPromptForCurrentStudent(currentItemData);
+    const existingChat = await findLatestChat();
 
-    // 채팅 세션 준비
-    currentChatId = await getOrCreateChat();
+    if (existingChat) {
+      currentChatId = existingChat.id;
+      currentSystemPrompt = existingChat.systemPrompt || "";
 
-    const loadedMessages = await loadMessages(currentChatId);
-    localMessages = loadedMessages.map((msg) => ({
-      role: msg.role,
-      content: msg.content,
-    }));
+      const loadedMessages = await loadMessages(currentChatId);
+      localMessages = loadedMessages.map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
 
-    // 처음 입장한 세션이면 AI 첫 발화 저장
-    if (localMessages.length === 0) {
-      const initialAssistantMessage =
-        "질문하기를 잘 눌렀어! 모르는 문제를 질문을 통해 풀 수 있게 되면 원하는 학습 목표를 달성할 수 있을거야:) 그러면 일단 질문하는 문제에서 구하고자 하는 것과 문제를 풀기 위한 방법을 한 번 분석해볼까?";
+      document.getElementById("sessionNotice").classList.remove("hidden");
+      chatInput.disabled = true;
+      sendBtn.disabled = true;
+    } else {
+      await createNewChatSession();
 
-      await saveMessage(currentChatId, "assistant", initialAssistantMessage);
-      localMessages.push({
-        role: "assistant",
-        content: initialAssistantMessage,
-      });
+      document.getElementById("sessionNotice").classList.add("hidden");
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
     }
 
     loadingBox.classList.add("hidden");
@@ -289,6 +404,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadingBox.classList.add("hidden");
     showMessage(error.message || "챗봇을 준비하는 중 오류가 발생했습니다.", "error");
   }
+
+  document
+  .getElementById("recreateSessionBtn")
+  .addEventListener("click", async () => {
+    loadingBox.classList.remove("hidden");
+    loadingBox.textContent = "새로운 질문 세션을 만드는 중입니다.";
+
+    await createNewChatSession();
+
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+
+    document.getElementById("sessionNotice").classList.add("hidden");
+
+    loadingBox.classList.add("hidden");
+  });
 
   chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();

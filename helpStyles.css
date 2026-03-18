@@ -338,3 +338,33 @@ body {
     max-width: 92%;
   }
 }
+
+.session-notice {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.session-toolbar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.recreate-btn {
+  background: #6c63ff;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.recreate-btn:hover {
+  background: #574fd6;
+}
