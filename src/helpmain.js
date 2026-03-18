@@ -164,7 +164,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       itemId,
       studentState,
       studentMisconception,
-      systemPrompt: prompt,
       createdAt: serverTimestamp(),
     });
 
