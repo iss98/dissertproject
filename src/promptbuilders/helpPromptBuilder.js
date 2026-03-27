@@ -20,7 +20,7 @@ export async function buildHelpPrompt({
   itemcognitiveAttribute,
   itemitemAnalysis,
   titemId,
-  itemcategory,
+  itemtype,
   studentId
 }) {
   let systemPrompt = `
@@ -93,7 +93,7 @@ ${studentMisconception}
     ${latestLog.answer}
     \n`
   } else {
-    const itemQuery2 = query(collection(db, "itemsolvelogs"), where("category", "==", itemcategory), where("studentId", "==", studentId), orderBy("createdAt", "desc"), limit(1));
+    const itemQuery2 = query(collection(db, "itemsolvelogs"), where("type", "==", itemtype), where("studentId", "==", studentId), orderBy("createdAt", "desc"), limit(1));
     const itemSolveLogSnap2 = await getDocs(itemQuery2);
 
     if (itemSolveLogSnap2.exists()) {

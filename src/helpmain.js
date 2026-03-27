@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const studentState = await getStudentState(itemData, attemptLog);
     const studentMisconception = await getStudentMisconception(attemptLog);
 
-    const itemcategory = itemData.category || "";
+    const itemtype = itemData.type || "";
     const itemstem = itemData.stem || "";
     const itemsolution = itemData.solution || "";
     const itemanswer = itemData.answer || "";
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       itemcognitiveAttribute,
       itemitemAnalysis,
       itemId,
-      itemcategory,
+      itemtype,
       studentId
     });
 
