@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const itemId = encodeURIComponent(item.id);
         const returnTo = encodeURIComponent("/plusitem.html");
-        window.location.href = `/nplus.html?itemId=${itemId}&returnTo=${returnTo}`;
+        window.location.href = `/shelp.html?itemId=${itemId}&returnTo=${returnTo}`;
       });
 
       askAIBtn?.addEventListener("click", goToQuestionPage);

@@ -28,6 +28,7 @@ export default defineConfig({
                 divitem : resolve(__dirname, 'divitem.html'),
                 divreflection : resolve(__dirname, 'divreflection.html'),
                 hlep : resolve(__dirname, 'help.html'),
+                shelp : resolve(__dirname, "shelp.html"),
                 nhelp : resolve(__dirname, 'nhelp.html'),
                 goalsetting : resolve(__dirname, 'goalsetting.html'),
             },
