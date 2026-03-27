@@ -8,7 +8,8 @@ import {
   serverTimestamp,
   where,
   orderBy,
-  limit
+  limit,
+  updateDoc
 } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 import {
@@ -41,6 +42,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   let currentItemData = null;
   let localMessages = [];
 
+  async function savePreference(messageId, preference) {
+    if (!currentChatId || !messageId) return;
+
+    const messageRef = doc(db, "chat", currentChatId, "messages", messageId);
+    await updateDoc(messageRef, {
+      preference,
+      preferenceAt: serverTimestamp(),
+    });
+
+    localMessages = localMessages.map((msg) =>
+      msg.id === messageId ? { ...msg, preference } : msg
+    );
+
+    renderMessages();
+  }
+
   if (!studentId) {
     window.location.href = "/index.html";
     return;
@@ -69,16 +86,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     chatMessages.innerHTML = localMessages
       .map((msg) => {
         const isUser = msg.role === "user";
+        const preference = msg.preference || "";
+
         return `
           <div class="chat-bubble-row ${isUser ? "user-row" : "assistant-row"}">
             <div class="chat-bubble ${isUser ? "user-bubble" : "assistant-bubble"}">
               <div class="chat-role">${isUser ? "나" : "AI"}</div>
               <div class="chat-content">${escapeHtml(msg.content).replace(/\n/g, "<br>")}</div>
+
+              ${
+                !isUser
+                  ? `
+                <div class="message-feedback">
+                  <button
+                    type="button"
+                    class="feedback-btn ${preference === "like" ? "active" : ""}"
+                    data-message-id="${msg.id}"
+                    data-preference="like"
+                    ${preference ? "disabled" : ""}
+                  >
+                    👍 좋음
+                  </button>
+                  <button
+                    type="button"
+                    class="feedback-btn ${preference === "dislike" ? "active dislike" : ""}"
+                    data-message-id="${msg.id}"
+                    data-preference="dislike"
+                    ${preference ? "disabled" : ""}
+                  >
+                    👎 나쁨
+                  </button>
+                </div>
+              `
+                  : ""
+              }
             </div>
           </div>
         `;
       })
       .join("");
+
+    chatMessages.querySelectorAll(".feedback-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const messageId = button.dataset.messageId;
+        const preference = button.dataset.preference;
+
+        try {
+          await savePreference(messageId, preference);
+        } catch (error) {
+          console.error(error);
+          showMessage("선호도 저장 중 오류가 발생했습니다.", "error");
+        }
+      });
+    });
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
@@ -174,12 +234,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const initialAssistantMessage =
       "질문하기를 잘 눌렀어! 모르는 문제를 질문을 통해 풀 수 있게 되면 원하는 학습 목표를 달성할 수 있을거야:) 이 문제를 풀기 위해서는 가장 먼저 무엇을 해야할까?";
 
-    await saveMessage(currentChatId, "assistant", initialAssistantMessage);
+    const initialAssistantMessageId = await saveMessage(currentChatId, "assistant", initialAssistantMessage);
 
     localMessages = [
       {
+        id : initialAssistantMessageId,
         role: "assistant",
         content: initialAssistantMessage,
+        preference : null,
       },
     ];
 
@@ -205,11 +267,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function saveMessage(chatId, role, content) {
-    await addDoc(collection(db, "chat", chatId, "messages"), {
+    const docRef = await addDoc(collection(db, "chat", chatId, "messages"), {
       role,
       content,
+      preference: null,
       createdAt: serverTimestamp(),
     });
+
+    return docRef.id;
   }
 
   function convertToOpenAIInput(systemPrompt, messages) {
@@ -385,13 +450,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const loadedMessages = await loadMessages(currentChatId);
       localMessages = loadedMessages.map((msg) => ({
+        id : msg.id,
         role: msg.role,
         content: msg.content,
+        preference: msg.preference ||null,
       }));
 
       document.getElementById("sessionNotice").classList.remove("hidden");
-      chatInput.disabled = true;
-      sendBtn.disabled = true;
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
     } else {
       await createNewChatSession();
 
@@ -437,20 +504,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       sendBtn.disabled = true;
       chatInput.disabled = true;
 
-      await saveMessage(currentChatId, "user", userText);
+      const userMessageId = await saveMessage(currentChatId, "user", userText);
       localMessages.push({
+        id : userMessageId,
         role: "user",
         content: userText,
+        preference : null,
       });
       renderMessages();
       chatInput.value = "";
 
       const assistantText = await requestAssistantResponse();
 
-      await saveMessage(currentChatId, "assistant", assistantText);
+      const assistantMessageId = await saveMessage(currentChatId, "assistant", assistantText);
       localMessages.push({
+        id : assistantMessageId,
         role: "assistant",
         content: assistantText,
+        preference : null,
       });
       renderMessages();
     } catch (error) {

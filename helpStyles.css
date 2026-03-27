@@ -368,3 +368,43 @@ body {
 .recreate-btn:hover {
   background: #574fd6;
 }
+
+.message-feedback {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.feedback-btn {
+  border: 1px solid #d5e5ff;
+  background: #f7fbff;
+  color: #32567d;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.feedback-btn:hover {
+  background: #eaf3ff;
+  transform: translateY(-1px);
+}
+
+.feedback-btn.active {
+  background: #eaf7ee;
+  border-color: #bbf7d0;
+  color: #15803d;
+}
+
+.feedback-btn.active.dislike {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #d14343;
+}
+
+.feedback-btn:disabled {
+  cursor: default;
+  opacity: 1;
+}

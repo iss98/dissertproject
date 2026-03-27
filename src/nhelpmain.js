@@ -7,6 +7,7 @@ import {
   query,
   serverTimestamp,
   where,
+  updateDoc
 } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 import { fetchHelpResponse } from "./services/openaiService.js";
@@ -31,6 +32,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   let currentSystemPrompt = "";
   let currentItemData = null;
   let localMessages = [];
+
+  async function savePreference(messageId, preference) {
+    if (!currentChatId || !messageId) return;
+
+    const messageRef = doc(db, "chat", currentChatId, "messages", messageId);
+
+    await updateDoc(messageRef, {
+      preference,
+      preferenceAt: serverTimestamp(),
+    });
+
+    localMessages = localMessages.map((msg) =>
+      msg.id === messageId ? { ...msg, preference } : msg
+    );
+
+    renderMessages();
+  }
 
   if (!studentId) {
     window.location.href = "/index.html";
@@ -60,16 +78,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     chatMessages.innerHTML = localMessages
       .map((msg) => {
         const isUser = msg.role === "user";
+        const preference = msg.preference || "";
+
         return `
           <div class="chat-bubble-row ${isUser ? "user-row" : "assistant-row"}">
             <div class="chat-bubble ${isUser ? "user-bubble" : "assistant-bubble"}">
               <div class="chat-role">${isUser ? "나" : "AI"}</div>
               <div class="chat-content">${escapeHtml(msg.content).replace(/\n/g, "<br>")}</div>
+
+              ${
+                !isUser && msg.id
+                  ? `
+                <div class="message-feedback">
+                  <button
+                    type="button"
+                    class="feedback-btn ${preference === "like" ? "active like" : ""}"
+                    data-message-id="${msg.id}"
+                    data-preference="like"
+                    ${preference ? "disabled" : ""}
+                  >
+                    👍 좋음
+                  </button>
+                  <button
+                    type="button"
+                    class="feedback-btn ${preference === "dislike" ? "active dislike" : ""}"
+                    data-message-id="${msg.id}"
+                    data-preference="dislike"
+                    ${preference ? "disabled" : ""}
+                  >
+                    👎 나쁨
+                  </button>
+                </div>
+              `
+                  : ""
+              }
             </div>
           </div>
         `;
       })
       .join("");
+
+    chatMessages.querySelectorAll(".feedback-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const messageId = button.dataset.messageId;
+        const preference = button.dataset.preference;
+
+        try {
+          await savePreference(messageId, preference);
+        } catch (error) {
+          console.error(error);
+          showMessage("선호도 저장 중 오류가 발생했습니다.", "error");
+        }
+      });
+    });
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
@@ -132,11 +193,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function saveMessage(chatId, role, content) {
-    await addDoc(collection(db, "chat", chatId, "messages"), {
+    const docRef = await addDoc(collection(db, "chat", chatId, "messages"), {
       role,
       content,
       createdAt: serverTimestamp(),
+      preference: null,
     });
+
+    return docRef.id;
   }
 
   function convertToOpenAIInput(systemPrompt, messages) {
@@ -256,8 +320,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const loadedMessages = await loadMessages(currentChatId);
     localMessages = loadedMessages.map((msg) => ({
+      id: msg.id,
       role: msg.role,
       content: msg.content,
+      preference: msg.preference || null,
     }));
 
     // // 처음 입장한 세션이면 AI 첫 발화 저장
@@ -293,20 +359,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       sendBtn.disabled = true;
       chatInput.disabled = true;
 
-      await saveMessage(currentChatId, "user", userText);
+      const userMessageId = await saveMessage(currentChatId, "user", userText);
       localMessages.push({
+        id: userMessageId,
         role: "user",
         content: userText,
+        preference: null,
       });
       renderMessages();
       chatInput.value = "";
 
       const assistantText = await requestAssistantResponse();
 
-      await saveMessage(currentChatId, "assistant", assistantText);
+      const assistantMessageId = await saveMessage(currentChatId, "assistant", assistantText);
       localMessages.push({
+        id: assistantMessageId,
         role: "assistant",
         content: assistantText,
+        preference: null,
       });
       renderMessages();
     } catch (error) {
