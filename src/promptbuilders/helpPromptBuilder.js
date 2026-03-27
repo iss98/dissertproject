@@ -19,7 +19,7 @@ export async function buildHelpPrompt({
   itemanswer,
   itemcognitiveAttribute,
   itemitemAnalysis,
-  titemId,
+  itemId,
   itemtype,
   studentId
 }) {
@@ -28,7 +28,7 @@ export async function buildHelpPrompt({
 
 1. 문제 분석하기
 문제 분석하기 단계의 목표는 [문제 정보]의 <문제 풀이 단계 분석>과 같이 학생이 문제 풀이 방법을 대략적으로 분석하게 만드는 것입니다.
-학생의 문제 분석하기 답변이 불충분한 경우 [문제 정보]의 <문제 풀이 단계 분석>과 학생의 답변을 바탕으로 학생이 분석하지 못한 내용을 정리하여 얘기해주면 됩니다.
+학생의 문제 분석하기 답변이 불충분한 경우 [문제 정보]의 <문제 풀이 단계 분석>과 학생의 답변을 바탕으로 학생이 분석하지 못한 내용에 대한 힌트를 주면 됩니다.
 
 2. 자신의 학습 분석하기
 자신의 학습 분석하기 단계의 목표는 학생이 자신의 문제 풀이 과정을 분석하여 자신이 약한 부분(오개념)이 무엇인지 깨닫도록 하는 것입니다.
@@ -36,7 +36,7 @@ export async function buildHelpPrompt({
 만약 학생이 해당 문제를 이미 푼 기록이 있는 경우 "문제 풀이를 시도했었구나. 문제 풀이 과정을 설명해볼래?"와 같이 메타인지 질문을 하면 됩니다.
 만약 학생이 해당 문제를 이미 푼 기록이 없지만 비슷한 문제를 푼 기록이 있는 경우 "비슷한 문제는 풀어봤었네! 아깐 풀어본 문제를 어디가 달라서 문제 풀이를 못한거야?"와 같이 메타인지 질문을 하면 됩니다.
 만약 학생이 해당 문제를 이미 푼 기록이 없으며 비슷한 문제를 푼 기록도 없는 경우 "문제 풀이를 시도해보지 않았구나. 왜 시도해보지 못했어?"와 같이 메타인지 질문을 하면 됩니다.
-학생이 자신의 학습을 자신이 약한 부분(오개념)에 대한 분석이 부족하다면 학생의 답변과 [학생의 오개념 리스트] 중 현재 문제와 관련된 오개념을 바탕으로 학생이 약한 부분을 정리하여 얘기해주면 됩니다.
+학생이 자신의 학습을 자신이 약한 부분(오개념)에 대한 분석이 부족하다면 학생의 답변과 [학생의 오개념 리스트] 중 현재 문제와 관련된 오개념을 바탕으로 학생이 약한 부분에 대한 힌트를 주면 됩니다.
 
 3. 질문하기 
 질문하기 단계의 목표는 학생이 문제와 자신의 학습 분석을 바탕으로 구체적인 질문을 하여 문제 풀이에 도움을 받는 것입니다.
@@ -77,11 +77,11 @@ ${studentState}
 ${studentMisconception}
 `;
 
-  const itemQuery1 = query(collection(db, "itemsolvelogs"), where("itemId", "==", titemId), where("studentId", "==", studentId), orderBy("createdAt", "desc"), limit(1));
+  const itemQuery1 = query(collection(db, "itemsolvelogs"), where("itemId", "==", itemId), where("studentId", "==", studentId), orderBy("createdAt", "desc"), limit(1));
 
   const itemSolveLogSnap1 = await getDocs(itemQuery1);
 
-  if (itemSolveLogSnap1.exists()) {
+  if (!itemSolveLogSnap1.empty) {
     const latestLog = itemSolveLogSnap1.docs[0].data();
 
     systemPrompt += `
@@ -93,25 +93,21 @@ ${studentMisconception}
     ${latestLog.answer}
     \n`
   } else {
-    const itemQuery2 = query(collection(db, "itemsolvelogs"), where("type", "==", itemtype), where("studentId", "==", studentId), orderBy("createdAt", "desc"), limit(1));
+    const itemQuery2 = query(collection(db, "itemsolvelogs"), where("itemtype", "==", itemtype), where("studentId", "==", studentId), orderBy("createdAt", "desc"), limit(1));
     const itemSolveLogSnap2 = await getDocs(itemQuery2);
 
-    if (itemSolveLogSnap2.exists()) {
+    if (!itemSolveLogSnap2.empty) {
       const latestLog = itemSolveLogSnap2.docs[0].data();
-      tId = latestLog.itemId || "";
-      const itemRef = doc(db, "items", tId);
-      const itemSnap = await getDoc(itemRef);
-      const itemData = itemSnap.data();
 
       systemPrompt += `
       \n\n
       [학생의 유사한 문제 풀이 기록]
       <유사 문제-stem>
-      ${itemData.stem}
+      ${latestLog.itemstem}
       <유사문제-solution>
-      ${itemData.solution}
+      ${latestLog.itemsolution}
       <유사문제-answer>
-      ${itemData.answer}
+      ${latestLog.itemanswer}
       <학생의 풀이 - solution>
       ${latestLog.solution}
       <학생의 풀이 - answer>
@@ -135,26 +131,16 @@ export async function getStudentState(itemData, attemptLog) {
   let i = 0;
 
   for (const log of attemptLog) {
-    // console.log(log)
-    const tId = log.itemId;
-    const itemRef = doc(db, "items", tId);
-    const itemSnap = await getDoc(itemRef);
-    const itemData = itemSnap.data();
-    const itemstem = itemData.stem || "";
-    const itemsolution = itemData.solution || "";
-    const itemanswer = itemData.answer || "";
-    const itemcognitiveAttribute = itemData.cognitiveAttribute || "";
-
     prompt += `
     [문제 풀이 로그 ${i+1}]
     <stem>
-    ${itemstem}
+    ${log.itemstem}
     <solution>
-    ${itemsolution}
+    ${log.itemsolution}
     <answer>
-    ${itemanswer}
+    ${log.itemanswer}
     <필요한 인지 요소>
-    ${itemcognitiveAttribute}
+    ${log.itemcognitiveattribute}
     <학생의 풀이 과정>
     ${log.solution}
     <학생의 풀이 결과>
@@ -177,10 +163,10 @@ export async function getStudentState(itemData, attemptLog) {
 
   const response = await getResponse({input: prompt});
 
-  console.log("=== 학생 상태 예측 프롬프트 ===");
-  console.log(prompt);
-  console.log("=== 학생 상태 예측 결과 ===");
-  console.log(response.output_text);
+  // console.log("=== 학생 상태 예측 프롬프트 ===");
+  // console.log(prompt);
+  // console.log("=== 학생 상태 예측 결과 ===");
+  // console.log(response.output_text);
   return response.output_text || "예측 과정에서 에러가 생김 : 0.5";
 }
 
@@ -199,25 +185,16 @@ export async function getStudentMisconception(attemptLog) {
   `
   let i = 0;
   for (const log of attemptLog) {
-    const tId = log.itemId;
-    const itemRef = doc(db, "items", tId);
-    const itemSnap = await getDoc(itemRef);
-    const itemData = itemSnap.data();
-    const itemstem = itemData.stem || "";
-    const itemsolution = itemData.solution || "";
-    const itemanswer = itemData.answer || "";
-    const itemcognitiveAttribute = itemData.cognitiveAttribute || "";
-
     prompt += `
     [문제 풀이 로그 ${i+1}]
     <stem>
-    ${itemstem}
+    ${log.itemstem}
     <solution>
-    ${itemsolution}
+    ${log.itemsolution}
     <answer>
-    ${itemanswer}
+    ${log.itemanswer}
     <필요한 인지 요소>
-    ${itemcognitiveAttribute}
+    ${log.itemcognitiveattribute}
     <학생의 풀이 과정>
     ${log.solution}
     <학생의 풀이 결과>
@@ -226,11 +203,11 @@ export async function getStudentMisconception(attemptLog) {
     i++;
   }
 
-  console.log("=== 오개념 분석 프롬프트 ===");
-  console.log(prompt);
+  // console.log("=== 오개념 분석 프롬프트 ===");
+  // console.log(prompt);
   const response = await getResponse({input: prompt});
-  console.log("=== 오개념 분석 결과 ===");
-  console.log(response.output_text);
+  // console.log("=== 오개념 분석 결과 ===");
+  // console.log(response.output_text);
   return response.output_text || "오개념 분석 중 문제가 생김 : 오개념 없음";
 }
 

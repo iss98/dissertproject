@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const attemptlog = await loadLatestSolveLogs();
 
     const [prompt, state, misconception] =
-      await buildPromptForCurrentStudent(currentItemData, attemptlog);
+      await buildPromptForCurrentStudent(itemId, studentId, currentItemData, attemptlog);
 
     currentSystemPrompt = prompt;
     studentState = state;
@@ -252,7 +252,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return logs;
   }
 
-  async function buildPromptForCurrentStudent(itemData, attemptLog) {
+  async function buildPromptForCurrentStudent(itemId, studentId, itemData, attemptLog) {
     const studentState = await getStudentState(itemData, attemptLog);
     const studentMisconception = await getStudentMisconception(attemptLog);
 

@@ -242,6 +242,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             batch.set(logRef, {
                 studentId,
                 itemId: item.id,
+                itemtype : item.type,
+                itemstem : item.stem,
+                itemsolution : item.solution,
+                itemanswer : item.answer, 
+                itemcognitiveattribute : item.cognitiveAttribute,
                 solution: saved.solution || "",
                 answer: studentAnswer,
                 correct: isCorrect, 
