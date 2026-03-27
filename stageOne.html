@@ -30,8 +30,14 @@
             <div class="brand-badge">S1</div>
             <h1>Stage 1. 사전 검사</h1>
             <p>
-              사전 검사는 현재 학습 상태를 확인하기 위한 단계입니다.
-              각 문항을 차분히 읽고 풀이와 답안을 작성해 주세요.
+              사전 검사는 현재 학습 상태를 확인하기 위한 단계입니다. <br>
+              각 문항을 차분히 읽고 풀이와 답안을 작성해 주세요. <br> <br>
+            
+              답안을 작성할 때는 다음 규칙을 지켜주세요: <br>
+              1. 풀이 과정을 반드시 작성할 필요는 없습니다. <br>
+              2. 정답이 분수 인 경우 4/3과 같이 슬래시(/)를 사용하여 작성해 주세요. <br>
+              3. 정답이 소수인 경우 0.75와 같이 소수점(.)을 사용하여 작성해 주세요. <br>
+              4. 정답이 음수인 경우 숫자의 -1과 같이 숫자 앞에 마이너스 기호(-)를 붙여 작성해 주세요.
             </p>
 
             <div class="student-info-card">
@@ -67,12 +73,30 @@
 
                 <div class="input-section">
                   <label for="solutionInput" class="input-label">풀이</label>
+
+                  <div class="math-toolbar" id="mathToolbar">
+                    <button type="button" class="math-tool-btn" data-insert="+">+</button>
+                    <button type="button" class="math-tool-btn" data-insert="-">−</button>
+                    <button type="button" class="math-tool-btn" data-insert="\times ">×</button>
+                    <button type="button" class="math-tool-btn" data-insert="\div ">÷</button>
+                    <button type="button" class="math-tool-btn" data-insert="=">=</button>
+                    <button type="button" class="math-tool-btn" data-insert="()">괄호</button>
+                    <button type="button" class="math-tool-btn" data-insert="\frac{}{}">분수</button>
+                  </div>
+
                   <textarea
                     id="solutionInput"
                     class="solution-answer"
                     rows="8"
                     placeholder="풀이 과정을 작성하세요."
                   ></textarea>
+
+                  <div class="math-preview-card">
+                    <div class="math-preview-label">수식 미리보기</div>
+                    <div id="solutionPreview" class="math-preview-content">
+                      입력한 수식이 여기에 보입니다.
+                    </div>
+                  </div>
                 </div>
 
                 <div class="input-section">

@@ -475,3 +475,92 @@ body {
     transform: translateY(0) scale(1);
   }
 }
+
+.math-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.math-tool-btn {
+  border: 1px solid #cfe0f8;
+  background: #f7fbff;
+  color: #1f4f84;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.math-tool-btn:hover {
+  background: #eaf3ff;
+  border-color: #7caeff;
+  transform: translateY(-1px);
+}
+
+.math-help-text {
+  margin-top: 8px;
+  font-size: 0.88rem;
+  color: #6a7f96;
+}
+
+.math-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.math-tool-btn {
+  border: 1px solid #cfe0f8;
+  background: #f7fbff;
+  color: #1f4f84;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.math-tool-btn:hover {
+  background: #eaf3ff;
+  border-color: #7caeff;
+  transform: translateY(-1px);
+}
+
+.math-preview-card {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: #f8fbff;
+  border: 1px solid #d8e8ff;
+  border-radius: 14px;
+}
+
+.math-preview-label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #32567d;
+  margin-bottom: 8px;
+}
+
+.math-preview-content {
+  min-height: 48px;
+  color: #17324d;
+  line-height: 1.8;
+  word-break: break-word;
+}
+
+/* 분수 전체 크기 확대 */
+mjx-container .mfrac {
+  font-size: 1.35em !important;
+}
+
+/* 분수 안 숫자 간격도 살짝 넓힘 */
+mjx-container .mfrac mjx-num,
+mjx-container .mfrac mjx-den {
+  padding: 0 2px;
+}

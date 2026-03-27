@@ -24,6 +24,71 @@ document.addEventListener("DOMContentLoaded", async () => {
   const navButtonRow = document.getElementById("navButtonRow");
   const examDescription = document.getElementById("examDescription");
   const messageBox = document.getElementById("messageBox");
+  const mathToolbar = document.getElementById("mathToolbar");
+  const solutionPreview = document.getElementById("solutionPreview");;
+
+
+  function insertAtCursor(textarea, text, cursorPosition = null) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const original = textarea.value;
+
+    textarea.value =
+      original.substring(0, start) +
+      text +
+      original.substring(end);
+
+    const newPos = cursorPosition ?? start + text.length;
+    textarea.focus();
+    textarea.setSelectionRange(newPos, newPos);
+
+    updateSolutionPreview();
+  }
+
+  async function updateSolutionPreview() {
+    const value = solutionInput.value.trim();
+
+    if (!value) {
+      solutionPreview.textContent = "입력한 수식이 여기에 보입니다.";
+      return;
+    }
+
+    solutionPreview.innerHTML = `\\(${value}\\)`;
+
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      try {
+        await window.MathJax.typesetPromise([solutionPreview]);
+      } catch (error) {
+        solutionPreview.textContent = value;
+      }
+    }
+  }
+
+  function handleMathInsert(insertValue) {
+    const start = solutionInput.selectionStart;
+
+    if (insertValue === "\\frac{}{}") {
+      insertAtCursor(solutionInput, "\\frac{}{}", start + 6);
+      return;
+    }
+
+    if (insertValue === "()") {
+      insertAtCursor(solutionInput, "()", start + 1);
+      return;
+    }
+
+    insertAtCursor(solutionInput, insertValue);
+  }
+
+  if (mathToolbar) {
+    mathToolbar.querySelectorAll(".math-tool-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        handleMathInsert(button.dataset.insert);
+      });
+    });
+  }
+
+  solutionInput.addEventListener("input", updateSolutionPreview);
 
   if (!studentId) {
     alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
@@ -105,7 +170,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           다음 →
         </button>
       `;
-    }
+    } 
 
     navButtonRow.innerHTML = html;
 
@@ -188,7 +253,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const studentRef = doc(db, "students", studentId);
         await updateDoc(studentRef, {
-            stage: 5,
+            stage: 2,
         });
 
         alert("성공적으로 제출되었습니다. 다음 단계로 이동합니다.");
