@@ -25,10 +25,47 @@ document.addEventListener("DOMContentLoaded", async () => {
   const examDescription = document.getElementById("examDescription");
   const messageBox = document.getElementById("messageBox");
   const backBtn = document.getElementById("backBtn");
-  const askBtn = document.getElementById("askBtn");
+  const askRow = document.getElementById("askRow");
   const mathToolbar = document.getElementById("mathToolbar");
   const solutionPreview = document.getElementById("solutionPreview");;
 
+  function buildAskButtons() {
+    if (!askRow) return;
+
+    if (experimentValue === "help") {
+      askRow.innerHTML = `
+        <button type="button" id="askBasicBtn" class="ask-btn secondary">
+          질문하기
+        </button>
+        <button type="button" id="askAIBtn" class="ask-btn primary">
+          인공지능과 함께 질문하기
+        </button>
+      `;
+
+      const askBasicBtn = document.getElementById("askBasicBtn");
+      const askAIBtn = document.getElementById("askAIBtn");
+
+      askBasicBtn?.addEventListener("click", () => {
+        const item = getCurrentItem();
+        if (!item) return;
+
+        const itemId = encodeURIComponent(item.id);
+        const returnTo = encodeURIComponent("/plusitem.html");
+        window.location.href = `/nplus.html?itemId=${itemId}&returnTo=${returnTo}`;
+      });
+
+      askAIBtn?.addEventListener("click", goToQuestionPage);
+    } else {
+      askRow.innerHTML = `
+        <button type="button" id="askBtn" class="ask-btn primary single">
+          질문하기
+        </button>
+      `;
+
+      const askBtn = document.getElementById("askBtn");
+      askBtn?.addEventListener("click", goToQuestionPage);
+    }
+  }
 
   function insertAtCursor(textarea, text, cursorPosition = null) {
     const start = textarea.selectionStart;
@@ -371,14 +408,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.href = "/mul.html";
   });
 
-  askBtn?.addEventListener("click", goToQuestionPage);
-
   try {
     const studentRef = doc(db, "students", studentId);
     const studentSnap = await getDoc(studentRef);
     if (studentSnap.exists()) {
       experimentValue = studentSnap.data().experiment || "";
     }
+
+    buildAskButtons();
 
     const itemsRef = collection(db, "items");
     const itemsQuery = query(
