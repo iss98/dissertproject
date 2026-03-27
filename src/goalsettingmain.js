@@ -18,8 +18,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const scoreSummary = document.getElementById("scoreSummary");
   const wrongList = document.getElementById("wrongList");
   const goalForm = document.getElementById("goalForm");
-  const goalInput = document.getElementById("goalInput");
   const messageBox = document.getElementById("messageBox");
+  const plusInput = document.getElementById("plusInput");
+  const minusInput = document.getElementById("minusInput");
+  const mulInput = document.getElementById("mulInput");
+  const divInput = document.getElementById("divInput");
+  const goalInput = document.getElementById("goalInput");
 
   if (!studentId) {
     window.location.href = "/index.html";
@@ -116,10 +120,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
     clearMessage();
 
+    const plus = plusInput.value.trim();
+    const minus = minusInput.value.trim();
+    const mul = mulInput.value.trim();
+    const div = divInput.value.trim();
     const content = goalInput.value.trim();
 
-    if (!content) {
-      showMessage("학습 목표를 입력해 주세요.", "error");
+    if (!plus || !minus || !mul || !div || !content) {
+      showMessage("모든 항목을 입력해 주세요.", "error");
       return;
     }
 
@@ -132,6 +140,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       batch.set(writingRef, {
         studentId,
+        plus,
+        minus,
+        mul,
+        div,
         content,
         createdAt: serverTimestamp(),
         category: "first",

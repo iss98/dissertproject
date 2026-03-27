@@ -30,8 +30,8 @@
             <div class="brand-badge">GOAL</div>
             <h1>목표 세우기</h1>
             <p>
-              사전검사 결과를 보고 오늘 어떻게 수학을 공부하면 좋을지 계획을 세우고
-              오늘의 최종 목표를 작성해봅시다.
+              사전검사 결과를 보고 음수의 사칙연산에 대한 자신의 이해를 점검해봅시다. <br>
+              이후 오늘 학습의 목표를 설정하고 목표 달성을 위한 계획을 세워봅시다.
             </p>
 
             <div class="student-info-card">
@@ -70,14 +70,70 @@
               </div>
 
               <form id="goalForm" class="goal-form">
-                <label for="goalInput" class="input-label">오늘의 학습 목표</label>
-                <textarea
-                  id="goalInput"
-                  class="goal-input"
-                  rows="8"
-                  placeholder="예: 음수의 덧셈과 뺄셈에서 부호 규칙을 정확히 이해하고, 최종 시험에서 80점 이상 받기"
-                  required
-                ></textarea>
+                <div class="input-group">
+                  <label for="plusInput" class="input-label">
+                    1. 음수의 덧셈을 정확히 이해하고 관련된 문제를 풀 수 있나요?
+                  </label>
+                  <textarea
+                    id="plusInput"
+                    class="goal-input short-input"
+                    rows="3"
+                    placeholder="예: 같은 부호의 덧셈은 잘할 수 있지만, 다른 부호의 덧셈은 아직 헷갈립니다."
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="input-group">
+                  <label for="minusInput" class="input-label">
+                    2. 음수의 뺄셈을 정확히 이해하고 관련된 문제를 풀 수 있나요?
+                  </label>
+                  <textarea
+                    id="minusInput"
+                    class="goal-input short-input"
+                    rows="3"
+                    placeholder="예: 뺄셈을 덧셈으로 바꾸는 것은 알지만, 계산 실수가 가끔 있습니다."
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="input-group">
+                  <label for="mulInput" class="input-label">
+                    3. 음수의 곱셈을 정확히 이해하고 관련된 문제를 풀 수 있나요?
+                  </label>
+                  <textarea
+                    id="mulInput"
+                    class="goal-input short-input"
+                    rows="3"
+                    placeholder="예: 음수와 양수를 곱할 때 부호를 자주 헷갈립니다."
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="input-group">
+                  <label for="divInput" class="input-label">
+                    4. 음수의 나눗셈을 정확히 이해하고 관련된 문제를 풀 수 있나요?
+                  </label>
+                  <textarea
+                    id="divInput"
+                    class="goal-input short-input"
+                    rows="3"
+                    placeholder="예: 나눗셈도 곱셈과 같은 부호 규칙이라는 점을 더 연습해야 합니다."
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="input-group">
+                  <label for="goalInput" class="input-label">
+                    5. 오늘의 학습 목표를 세우고 학습 목표 달성을 위한 공부 계획을 작성해보세요.
+                  </label>
+                  <textarea
+                    id="goalInput"
+                    class="goal-input"
+                    rows="6"
+                    placeholder="예: 오늘은 음수의 사칙연산 부호 규칙을 정확히 이해하고, 틀린 문제를 다시 풀어보며 연습하겠습니다."
+                    required
+                  ></textarea>
+                </div>
 
                 <button type="submit" class="primary-btn">목표 저장</button>
               </form>

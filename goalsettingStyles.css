@@ -359,3 +359,11 @@ body {
     font-size: 1.4rem;
   }
 }
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+.short-input {
+  min-height: 96px;
+}
