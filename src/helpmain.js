@@ -128,7 +128,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const chatQuery = query(
       collection(db, "chat"),
       where("studentId", "==", studentId),
-      where("itemId", "==", itemId)
+      where("itemId", "==", itemId),
+      where("category", "==", "help")
     );
 
     const chatSnapshot = await getDocs(chatQuery);
@@ -164,13 +165,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       itemId,
       studentState,
       studentMisconception,
+      category : "help",
       createdAt: serverTimestamp(),
     });
 
     currentChatId = newChatRef.id;
 
     const initialAssistantMessage =
-      "질문하기를 잘 눌렀어! 모르는 문제를 질문을 통해 풀 수 있게 되면 원하는 학습 목표를 달성할 수 있을거야:) 그러면 일단 질문하는 문제에서 구하고자 하는 것과 문제를 풀기 위한 방법을 한 번 분석해볼까?";
+      "질문하기를 잘 눌렀어! 모르는 문제를 질문을 통해 풀 수 있게 되면 원하는 학습 목표를 달성할 수 있을거야:) 이 문제를 풀기 위해서는 가장 먼저 무엇을 해야할까?";
 
     await saveMessage(currentChatId, "assistant", initialAssistantMessage);
 
@@ -254,6 +256,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const studentState = await getStudentState(itemData, attemptLog);
     const studentMisconception = await getStudentMisconception(attemptLog);
 
+    const itemcategory = itemData.category || "";
     const itemstem = itemData.stem || "";
     const itemsolution = itemData.solution || "";
     const itemanswer = itemData.answer || "";
@@ -267,7 +270,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       itemsolution,
       itemanswer,
       itemcognitiveAttribute,
-      itemitemAnalysis
+      itemitemAnalysis,
+      itemId,
+      itemcategory,
+      studentId
     });
 
     return [prompt, studentState, studentMisconception];
