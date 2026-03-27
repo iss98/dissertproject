@@ -553,14 +553,3 @@ body {
   line-height: 1.8;
   word-break: break-word;
 }
-
-/* 분수 전체 크기 확대 */
-mjx-container .mfrac {
-  font-size: 1.35em !important;
-}
-
-/* 분수 안 숫자 간격도 살짝 넓힘 */
-mjx-container .mfrac mjx-num,
-mjx-container .mfrac mjx-den {
-  padding: 0 2px;
-}

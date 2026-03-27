@@ -26,6 +26,72 @@ document.addEventListener("DOMContentLoaded", async () => {
   const messageBox = document.getElementById("messageBox");
   const backBtn = document.getElementById("backBtn");
   const askBtn = document.getElementById("askBtn");
+  const mathToolbar = document.getElementById("mathToolbar");
+  const solutionPreview = document.getElementById("solutionPreview");;
+
+
+  function insertAtCursor(textarea, text, cursorPosition = null) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const original = textarea.value;
+
+    textarea.value =
+      original.substring(0, start) +
+      text +
+      original.substring(end);
+
+    const newPos = cursorPosition ?? start + text.length;
+    textarea.focus();
+    textarea.setSelectionRange(newPos, newPos);
+
+    updateSolutionPreview();
+  }
+
+  async function updateSolutionPreview() {
+    const value = solutionInput.value.trim();
+
+    if (!value) {
+      solutionPreview.textContent = "입력한 수식이 여기에 보입니다.";
+      return;
+    }
+
+    solutionPreview.innerHTML = `\\(${value}\\)`;
+
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      try {
+        await window.MathJax.typesetPromise([solutionPreview]);
+      } catch (error) {
+        solutionPreview.textContent = value;
+      }
+    }
+  }
+
+  function handleMathInsert(insertValue) {
+    const start = solutionInput.selectionStart;
+
+    if (insertValue === "\\frac{}{}") {
+      insertAtCursor(solutionInput, "\\frac{}{}", start + 6);
+      return;
+    }
+
+    if (insertValue === "()") {
+      insertAtCursor(solutionInput, "()", start + 1);
+      return;
+    }
+
+    insertAtCursor(solutionInput, insertValue);
+  }
+
+  if (mathToolbar) {
+    mathToolbar.querySelectorAll(".math-tool-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        handleMathInsert(button.dataset.insert);
+      });
+    });
+  }
+
+  solutionInput.addEventListener("input", updateSolutionPreview);
+
 
   if (!studentId) {
     window.location.href = "/index.html";
