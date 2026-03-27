@@ -105,13 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           다음 →
         </button>
       `;
-    } else {
-      html += `
-        <button type="button" class="nav-btn submit-btn" id="finalSubmitBtn">
-          최종 제출
-        </button>
-      `;
-    }
+    } 
 
     navButtonRow.innerHTML = html;
 

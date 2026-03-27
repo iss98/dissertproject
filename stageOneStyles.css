@@ -292,6 +292,24 @@ body {
   margin-left: auto;
 }
 
+/* submit 버튼만 따로 덮어쓰기 */
+.submit-btn {
+  width: 100%;
+  margin-left: 0;
+  display: block;
+
+  margin-top: 16px; /* 👈 위랑 띄우기 */
+
+  padding: 16px;
+  font-size: 1.05rem;
+  font-weight: 900;
+
+  background: linear-gradient(135deg, #ef4444, #dc2626); /* 👈 붉은색 */
+  color: white;
+
+  box-shadow: 0 12px 24px rgba(239, 68, 68, 0.25);
+}
+
 .secondary-btn {
   background: #eef5ff;
   color: #1f6feb;
