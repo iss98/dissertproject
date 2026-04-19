@@ -94,9 +94,8 @@ document.addEventListener("DOMContentLoaded", async () => {
               <div class="chat-role">${isUser ? "나" : "AI"}</div>
               <div class="chat-content">${escapeHtml(msg.content).replace(/\n/g, "<br>")}</div>
 
-              ${
-                !isUser
-                  ? `
+              ${!isUser
+            ? `
                 <div class="message-feedback">
                   <button
                     type="button"
@@ -118,8 +117,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                   </button>
                 </div>
               `
-                  : ""
-              }
+            : ""
+          }
             </div>
           </div>
         `;
@@ -225,7 +224,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       itemId,
       studentState,
       studentMisconception,
-      category : "help",
+      category: "help",
       createdAt: serverTimestamp(),
     });
 
@@ -238,16 +237,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     localMessages = [
       {
-        id : initialAssistantMessageId,
+        id: initialAssistantMessageId,
         role: "assistant",
         content: initialAssistantMessage,
-        preference : null,
+        preference: null,
       },
     ];
 
     renderMessages();
   }
-  
+
   async function loadMessages(chatId) {
     const messagesRef = collection(db, "chat", chatId, "messages");
     const snapshot = await getDocs(messagesRef);
@@ -450,10 +449,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const loadedMessages = await loadMessages(currentChatId);
       localMessages = loadedMessages.map((msg) => ({
-        id : msg.id,
+        id: msg.id,
         role: msg.role,
         content: msg.content,
-        preference: msg.preference ||null,
+        preference: msg.preference || null,
       }));
 
       document.getElementById("sessionNotice").classList.remove("hidden");
@@ -478,20 +477,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   document
-  .getElementById("recreateSessionBtn")
-  .addEventListener("click", async () => {
-    loadingBox.classList.remove("hidden");
-    loadingBox.textContent = "새로운 질문 세션을 만드는 중입니다.";
+    .getElementById("recreateSessionBtn")
+    .addEventListener("click", async () => {
+      loadingBox.classList.remove("hidden");
+      loadingBox.textContent = "새로운 질문 세션을 만드는 중입니다.";
 
-    await createNewChatSession();
+      await createNewChatSession();
 
-    chatInput.disabled = false;
-    sendBtn.disabled = false;
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
 
-    document.getElementById("sessionNotice").classList.add("hidden");
+      document.getElementById("sessionNotice").classList.add("hidden");
 
-    loadingBox.classList.add("hidden");
-  });
+      loadingBox.classList.add("hidden");
+    });
 
   chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -506,10 +505,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const userMessageId = await saveMessage(currentChatId, "user", userText);
       localMessages.push({
-        id : userMessageId,
+        id: userMessageId,
         role: "user",
         content: userText,
-        preference : null,
+        preference: null,
       });
       renderMessages();
       chatInput.value = "";
@@ -518,10 +517,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const assistantMessageId = await saveMessage(currentChatId, "assistant", assistantText);
       localMessages.push({
-        id : assistantMessageId,
+        id: assistantMessageId,
         role: "assistant",
         content: assistantText,
-        preference : null,
+        preference: null,
       });
       renderMessages();
     } catch (error) {

@@ -1,118 +1,291 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stage 5 - 사후 정의 검사</title>
-    <link rel="stylesheet" href="/stageTwoStyles.css" />
-  </head>
-  <body>
-    <div id="app">
-      <div class="page-shell">
-        <div class="left-panel">
-          <div class="brand-card">
-            <div class="brand-badge">S5</div>
-            <h1>Stage 5. 사후 정의 검사</h1>
-            <p>
-              다음 문항에 대해 자신의 생각과 느낌을 가장 잘 나타내는 정도를 선택해 주세요.
-            </p>
 
-            <div class="student-info-card">
-              <div class="info-row">
-                <span class="info-label">학생 아이디</span>
-                <span id="studentIdText" class="info-value">불러오는 중...</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">진행 단계</span>
-                <span class="info-value">Stage 5</span>
-              </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stage 5 - 사후 정의 검사</title>
+  <link rel="stylesheet" href="/stageTwoStyles.css" />
+</head>
+
+<body>
+  <div id="app">
+    <div class="page-shell">
+      <div class="left-panel">
+        <div class="brand-card">
+          <div class="brand-badge">S5</div>
+          <h1>Stage 5. 사후 정의 검사</h1>
+          <p>
+            다음 문항에 대해 자신의 생각과 느낌을 가장 잘 나타내는 정도를 선택해 주세요.
+          </p>
+
+          <div class="student-info-card">
+            <div class="info-row">
+              <span class="info-label">학생 아이디</span>
+              <span id="studentIdText" class="info-value">불러오는 중...</span>
             </div>
-          </div>
-        </div>
-
-        <div class="right-panel">
-          <div class="survey-card">
-            <div class="survey-header">
-              <h2>사후 정의 검사</h2>
-              <p class="section-desc">
-                각 문항에 대해 1점에서 5점까지 선택해 주세요.
-              </p>
+            <div class="info-row">
+              <span class="info-label">진행 단계</span>
+              <span class="info-value">Stage 5</span>
             </div>
-
-            <form id="affectiveForm" class="survey-form">
-              <div class="question-card">
-                <div class="question-number">문항 1</div>
-                <div class="question-text">당신은 수학을 좋아하십니까?</div>
-
-                <div class="likert-scale">
-                  <span class="scale-label left">전혀 그렇지 않다</span>
-                  <div class="likert-options">
-                    <label class="likert-option">
-                      <input type="radio" name="question1" value="1" required />
-                      <span>1</span>
-                    </label>
-                    <label class="likert-option">
-                      <input type="radio" name="question1" value="2" />
-                      <span>2</span>
-                    </label>
-                    <label class="likert-option">
-                      <input type="radio" name="question1" value="3" />
-                      <span>3</span>
-                    </label>
-                    <label class="likert-option">
-                      <input type="radio" name="question1" value="4" />
-                      <span>4</span>
-                    </label>
-                    <label class="likert-option">
-                      <input type="radio" name="question1" value="5" />
-                      <span>5</span>
-                    </label>
-                  </div>
-                  <span class="scale-label right">매우 그렇다</span>
-                </div>
-              </div>
-
-              <div class="question-card">
-                <div class="question-number">문항 2</div>
-                <div class="question-text">당신은 AI를 좋아하십니까?</div>
-
-                <div class="likert-scale">
-                  <span class="scale-label left">전혀 그렇지 않다</span>
-                  <div class="likert-options">
-                    <label class="likert-option">
-                      <input type="radio" name="question2" value="1" required />
-                      <span>1</span>
-                    </label>
-                    <label class="likert-option">
-                      <input type="radio" name="question2" value="2" />
-                      <span>2</span>
-                    </label>
-                    <label class="likert-option">
-                      <input type="radio" name="question2" value="3" />
-                      <span>3</span>
-                    </label>
-                    <label class="likert-option">
-                      <input type="radio" name="question2" value="4" />
-                      <span>4</span>
-                    </label>
-                    <label class="likert-option">
-                      <input type="radio" name="question2" value="5" />
-                      <span>5</span>
-                    </label>
-                  </div>
-                  <span class="scale-label right">매우 그렇다</span>
-                </div>
-              </div>
-
-              <button type="submit" class="primary-btn">응답 제출</button>
-            </form>
-
-            <div id="messageBox" class="message-box"></div>
           </div>
         </div>
       </div>
-    </div>
 
-    <script type="module" src="/src/stageFivemain.js"></script>
-  </body>
+      <div class="right-panel">
+        <div class="survey-card">
+          <div class="survey-header">
+            <h2>사후 정의 검사</h2>
+            <p class="section-desc">
+              각 문항에 대해 1점에서 5점까지 선택해 주세요.
+            </p>
+          </div>
+
+          <form id="affectiveForm" class="survey-form">
+            <div class="question-card">
+              <div class="question-number">문항 1</div>
+              <div class="question-text">수학 시간에는 어려운 내용이라도 좋으니까, 도전할 수 있는 문제를 배우고 싶다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question1" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question1" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question1" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question1" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question1" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 2</div>
+              <div class="question-text">수학 시간에는 조금 어렵더라도 호기심을 자극하는 내용을 배우고 싶다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question2" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question2" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question2" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question2" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question2" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 3</div>
+              <div class="question-text">수학을 배우면 논리적으로 생각하는 능력이 좋아진다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question3" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question3" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question3" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question3" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question3" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 4</div>
+              <div class="question-text">수학 점수를 더 잘 받기 위해서 열심히 공부할 것이다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question4" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question4" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question4" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question4" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question4" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 5</div>
+              <div class="question-text">나는 수학에서 좋은 성적을 받을 수 있다고 믿는다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question5" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question5" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question5" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question5" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question5" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 6</div>
+              <div class="question-text">나는 어려운 수학 내용도 스스로 이해할 수 있다고 믿는다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question6" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question6" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question6" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question6" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question6" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 7</div>
+              <div class="question-text">나는 수학에서 배우는 모든 내용을 잘 익힐 수 있다고 믿는다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question7" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question7" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question7" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question7" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question7" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 8</div>
+              <div class="question-text">나는 수학을 잘해서 친구들에게 설명해 줄 수 있다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question8" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question8" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question8" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question8" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question8" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 9</div>
+              <div class="question-text">수학 내용이 헷갈리면, 어디서부터 이해가 안 되는지 다시 살펴본다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question9" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question9" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question9" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question9" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question9" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 10</div>
+              <div class="question-text">수학 공부를 할 때, 스스로 목표 세우고 계획을 따라 공부한다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question10" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question10" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question10" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question10" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question10" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 11</div>
+              <div class="question-text">수업이 끝난 후 헷갈렸던 부분을 다시 정리하고 이해하려고 한다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question11" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question11" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question11" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question11" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question11" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 12</div>
+              <div class="question-text">문제를 풀 때 먼저 관련된 공식들을 떠올린다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question12" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question12" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question12" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question12" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question12" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-number">문항 13</div>
+              <div class="question-text">문제를 틀렸을 때, 개념을 몰라서 틀렸는지 계산 실수인지 구분한다.</div>
+
+              <div class="likert-scale">
+                <span class="scale-label left">전혀 그렇지 않다</span>
+                <div class="likert-options">
+                  <label class="likert-option"><input type="radio" name="question13" value="1"
+                      required /><span>1</span></label>
+                  <label class="likert-option"><input type="radio" name="question13" value="2" /><span>2</span></label>
+                  <label class="likert-option"><input type="radio" name="question13" value="3" /><span>3</span></label>
+                  <label class="likert-option"><input type="radio" name="question13" value="4" /><span>4</span></label>
+                  <label class="likert-option"><input type="radio" name="question13" value="5" /><span>5</span></label>
+                </div>
+                <span class="scale-label right">매우 그렇다</span>
+              </div>
+            </div>
+
+            <button type="submit" class="primary-btn">응답 제출</button>
+          </form>
+
+          <div id="messageBox" class="message-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/stageFivemain.js"></script>
+</body>
+
 </html>
