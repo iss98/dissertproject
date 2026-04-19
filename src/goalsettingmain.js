@@ -19,10 +19,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const wrongList = document.getElementById("wrongList");
   const goalForm = document.getElementById("goalForm");
   const messageBox = document.getElementById("messageBox");
-  const plusInput = document.getElementById("plusInput");
-  const minusInput = document.getElementById("minusInput");
-  const mulInput = document.getElementById("mulInput");
-  const divInput = document.getElementById("divInput");
   const goalInput = document.getElementById("goalInput");
 
   if (!studentId) {
@@ -120,10 +116,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
     clearMessage();
 
-    const plus = plusInput.value.trim();
-    const minus = minusInput.value.trim();
-    const mul = mulInput.value.trim();
-    const div = divInput.value.trim();
+    const plus = document.querySelector('input[name="plus"]:checked')?.value;
+    const minus = document.querySelector('input[name="minus"]:checked')?.value;
+    const mul = document.querySelector('input[name="mul"]:checked')?.value;
+    const div = document.querySelector('input[name="div"]:checked')?.value;
     const content = goalInput.value.trim();
 
     if (!plus || !minus || !mul || !div || !content) {
