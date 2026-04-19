@@ -273,7 +273,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
     }
 
-    arrowRow.innerHTML = html;
+    if (arrowRow) {
+      arrowRow.innerHTML = html;
+    }
 
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
@@ -338,11 +340,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         answer,
         createdAt: serverTimestamp(),
         itemId: item.id,
-        itemtype : item.type,
-        itemstem : item.stem,
-        itemsolution : item.solution,
-        itemanswer : item.answer, 
-        itemcognitiveattribute : item.cognitiveAttribute,
+        itemtype: item.type,
+        itemstem: item.stem,
+        itemsolution: item.solution,
+        itemanswer: item.answer,
+        itemcognitiveattribute: item.cognitiveAttribute,
         solution,
         studentId,
         correct,
