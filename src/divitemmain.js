@@ -34,9 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (experimentValue === "help") {
       askRow.innerHTML = `
-        <button type="button" id="askBasicBtn" class="ask-btn secondary">
-          질문하기
-        </button>
         <button type="button" id="askAIBtn" class="ask-btn primary">
           인공지능과 함께 질문하기
         </button>
