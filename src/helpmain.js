@@ -230,8 +230,51 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     currentChatId = newChatRef.id;
 
-    const initialAssistantMessage =
-      "질문하기를 잘 눌렀어! 모르는 문제를 질문을 통해 풀 수 있게 되면 원하는 학습 목표를 달성할 수 있을거야:) 이 문제를 풀기 위해서는 가장 먼저 무엇을 해야할까?";
+    const baseMessage = "질문하기를 잘 눌렀어! 모르는 문제를 질문을 통해 풀 수 있게 되면 원하는 학습 목표를 달성할 수 있을거야:)";
+    let typeMessage = " 이 문제를 풀기 위해서는 가장 먼저 무엇을 해야할까?";
+
+    if (currentItemData && currentItemData.type) {
+      switch (currentItemData.type) {
+        case "plus1":
+          typeMessage = " 음수가 포함된 덧셈에서는 어떤 계산 방법을 사용하면 좋을까?";
+          break;
+        case "plus2":
+          typeMessage = " 더해야하는 항이 여러개라면 어떤 계산 방법을 사용하면 좋을까?";
+          break;
+        case "minus1":
+          typeMessage = " 음수가 포함된 뺄셈에서는 어떤 계산 방법을 사용하면 좋을까?";
+          break;
+        case "minus2":
+          typeMessage = " 덧셈과 뺄셈의 혼합계산에서는 어떤 계산 방법을 사용하면 좋을까?";
+          break;
+        case "mul1":
+          typeMessage = " 음수가 포함된 곱셈에서는 어떤 계산 방법을 사용하면 좋을까?";
+          break;
+        case "mul2":
+          typeMessage = " 곱해야하는 항이 여러개라면 어떤 계산 방법을 사용하면 좋을까?";
+          break;
+        case "div1":
+          typeMessage = " 음수가 포함된 나눗셈에서는 어떤 계산 방법을 사용하면 좋을까?";
+          break;
+        case "div2":
+          typeMessage = " 곱셈과 나눗셈의 혼합계산에서는 어떤 계산 방법을 사용하면 좋을까?";
+          break;
+        case "complex1":
+          typeMessage = " ~보다 큰수와 ~보다 작은 수를 어떻게 표현할 수 있을까?";
+          break;
+        case "complex2":
+        case "complex6":
+          typeMessage = " 잘못 계산한 식을 이용하여 어떤 유리수를 어떻게 찾을 수 있을까?";
+          break;
+        case "complex3":
+          typeMessage = " 주어진 조건을 이용하여 어떻게 구하고자 하는 값을 표현할 수 있을까?";
+          break;
+        case "complex5":
+          typeMessage = " 주어진 조건에서 어떻게 숫자를 골라야할까?";
+          break;
+      }
+    }
+    const initialAssistantMessage = baseMessage + typeMessage;
 
     const initialAssistantMessageId = await saveMessage(currentChatId, "assistant", initialAssistantMessage);
 
@@ -317,7 +360,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function buildPromptForCurrentStudent(itemId, studentId, itemData, attemptLog) {
-    const studentState = await getStudentState(itemData, attemptLog);
+    const studentState = 0;
     const studentMisconception = await getStudentMisconception(attemptLog);
 
     const itemtype = itemData.type || "";
